@@ -1,23 +1,14 @@
 @extends('private.layouts.main')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
-        </div>
+<div class="container-fluid p-3">
+    <h2>Dashboard</h2>
+    <div class="grid">
+        @component('private.components.card')
+            @slot('route', 'inventory.index')
+            @slot('title', 'Inventory')
+            @slot('text', 'This is the example text of the Inventory...')
+        @endcomponent
     </div>
 </div>
 @endsection
