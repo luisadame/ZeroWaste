@@ -8,3 +8,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/about', 'ShowAbout')->name('about');
 Route::get('/contact', 'ContactController@index')->name('contact');
+Route::resource('inventory', 'InventoryController');
