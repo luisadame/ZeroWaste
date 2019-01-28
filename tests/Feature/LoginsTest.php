@@ -36,7 +36,6 @@ class LoginsTest extends TestCase
     /** @test */
     public function a_failed_login_is_recorded()
     {
-        //event(new Failed('web', $this->user, ));
         auth()->attempt(['email' => $this->user->email, 'password' => 'notsecret']);
         $data = [
             'user_id' => $this->user->id,
