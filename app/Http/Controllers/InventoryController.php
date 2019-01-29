@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Inventory;
 
 class InventoryController extends Controller
 {
@@ -13,7 +14,8 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+        $inventories = auth()->user()->inventories;
+        return view('private.inventory.index', compact('inventories'));
     }
 
     /**
@@ -43,9 +45,9 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Inventory $inventory)
     {
-        //
+        return view('private.inventory.show', compact('inventory'));
     }
 
     /**
