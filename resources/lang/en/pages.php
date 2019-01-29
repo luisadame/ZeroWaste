@@ -2,5 +2,6 @@
 
 return [
     'about' => 'about',
-    'contact' => 'contact'
+    'contact' => 'contact',
+    'inventory' => 'inventory'
 ];
