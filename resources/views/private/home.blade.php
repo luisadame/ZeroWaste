@@ -5,8 +5,8 @@
     <h2>Dashboard</h2>
     <div class="grid">
         @component('private.components.card')
-            @slot('route', 'inventory.index')
-            @slot('title', 'Inventory')
+            @slot('route', route('inventories.index'))
+            @slot('title', 'Inventories')
             @slot('text', 'This is the example text of the Inventory...')
         @endcomponent
     </div>

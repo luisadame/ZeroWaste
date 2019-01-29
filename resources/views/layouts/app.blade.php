@@ -20,5 +20,6 @@
         </div>
     </header>
     @yield('content')
+    @stack('scripts')
 </body>
 </html>

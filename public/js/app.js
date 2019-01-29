@@ -19321,9 +19321,9 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/luis/Sites/zerowaste/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/luis/Sites/zerowaste/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /home/luis/Sites/zerowaste/resources/sass/landing.scss */"./resources/sass/landing.scss");
+__webpack_require__(/*! /home/luis/Sites/ZeroWaste/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/luis/Sites/ZeroWaste/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /home/luis/Sites/ZeroWaste/resources/sass/landing.scss */"./resources/sass/landing.scss");
 
 
 /***/ })
