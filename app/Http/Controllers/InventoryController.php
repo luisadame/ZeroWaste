@@ -7,6 +7,11 @@ use App\Inventory;
 
 class InventoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Inventory::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
