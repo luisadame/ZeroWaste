@@ -30,7 +30,7 @@ class InventoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('private.inventory.create');
     }
 
     /**
@@ -41,7 +41,12 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        request()->validate(['name' => 'required|string']);
+        tap(new Inventory([
+            'name' => $request->input('name'),
+            'user_id' => auth()->id()
+        ]))->save();
+        return redirect()->route('inventories.index');
     }
 
     /**
@@ -61,9 +66,9 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Inventory $inventory)
     {
-        //
+        return view('private.inventory.edit', compact('inventory'));
     }
 
     /**
@@ -73,9 +78,11 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Inventory $inventory)
     {
-        //
+        request()->validate(['name' => 'string']);
+        $inventory->update(['name' => $request->input('name')]);
+        return redirect()->route('inventories.index');
     }
 
     /**
@@ -84,8 +91,9 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Inventory $inventory)
     {
-        //
+        $inventory->delete();
+        return redirect()->route('inventories.index');
     }
 }

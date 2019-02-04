@@ -3,6 +3,9 @@
     <div class="container mt-3">
         {{ Breadcrumbs::render('inventories') }}
         <h2>Inventories</h2>
+        <a href="{{ route('inventories.create') }}" class="btn btn-primary" tabindex="-1" role="button">
+            Create
+        </a>
         <div class="container-fluid grid mt-3 p-0">
             @forelse ($inventories as $inventory)
                 @component('private.components.card')

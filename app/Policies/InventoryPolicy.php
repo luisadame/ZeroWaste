@@ -30,7 +30,7 @@ class InventoryPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -42,7 +42,7 @@ class InventoryPolicy
      */
     public function update(User $user, Inventory $inventory)
     {
-        //
+        return $user->id == $inventory->user_id;
     }
 
     /**
@@ -54,7 +54,7 @@ class InventoryPolicy
      */
     public function delete(User $user, Inventory $inventory)
     {
-        //
+        return $user->id == $inventory->user_id;
     }
 
     /**
