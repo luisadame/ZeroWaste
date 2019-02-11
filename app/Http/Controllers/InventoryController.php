@@ -82,7 +82,7 @@ class InventoryController extends Controller
     {
         request()->validate(['name' => 'string']);
         $inventory->update(['name' => $request->input('name')]);
-        return redirect()->route('inventories.index');
+        return redirect()->route('inventories.show', $inventory->id);
     }
 
     /**
