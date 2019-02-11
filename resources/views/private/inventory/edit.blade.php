@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Create</button>
-                <a href="{{ route('inventories.index') }}" class="btn btn-link">Cancel</a>
+                <a href="{{ route('inventories.show', $inventory) }}" class="btn btn-link">Cancel</a>
             </form>
         </div>
     </div>
