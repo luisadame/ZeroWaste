@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
             CountriesSeeder::class,
             FoodTypeSeeder::class,
             InventoriesSeeder::class,
-            FoodSeeder::class,
             RecipesSeeder::class
         ]);
     }
