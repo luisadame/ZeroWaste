@@ -15,4 +15,9 @@ class Inventory extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function food()
+    {
+        return $this->belongsToMany('App\Food', 'inventory_food');
+    }
 }
