@@ -57,8 +57,8 @@ class InventoryController extends Controller
      */
     public function show(Inventory $inventory)
     {
-        $food = $inventory->food()->with('types')->get();
-        return view('private.inventory.show', compact('inventory', 'food'));
+        $foodCollection = $inventory->food()->with('types')->get();
+        return view('private.inventory.show', compact('inventory', 'foodCollection'));
     }
 
     /**
