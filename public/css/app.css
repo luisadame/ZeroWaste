@@ -10511,3 +10511,11 @@ a.text-dark:focus {
           transform: scale(0.98);
 }
 
+.card--danger {
+  background-color: #e33c2fcc;
+}
+
+.card--warning {
+  background-color: #ffed49cc;
+}
+
