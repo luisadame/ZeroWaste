@@ -15,7 +15,7 @@ class InventoriesSeeder extends Seeder
     public function run()
     {
         $food = function () {
-            return factory(App\Food::class, 10)
+            return factory(App\Food::class, 50)
                 ->create()
                 ->each(function ($food) {
                     $food->types()->attach(
