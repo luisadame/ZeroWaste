@@ -1,5 +1,16 @@
-<a href="{{ $route }}" class="text-decoration-none text-body">
-    <div class="card inventory">
+<a href="{{ $route }}" class="
+    text-decoration-none
+    text-body
+">
+    <div class="
+        card
+        inventory
+        @isset($classes)
+            @foreach($classes as $class)
+                {{$class}}
+            @endforeach
+        @endisset
+    ">
         <div class="card-body">
             @isset($img)
                 {!! $img !!}
