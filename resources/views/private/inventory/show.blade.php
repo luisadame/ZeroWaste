@@ -14,7 +14,7 @@
             </form>
         </div>
         <h3>Your food items</h3>
-        <div class="container-fluid grid mt-3 p-0">
+        <div class="container-fluid grid mt-3 mb-5 p-0">
             @forelse($foodCollection as $food)
                 @component(
                     'private.components.card',
@@ -28,5 +28,8 @@
                 <p>__('empty.no_food_yet')</p>
             @endforelse
         </div>
+        @if($foodCollection->isNotEmpty())
+            {{ $foodCollection->links() }}
+        @endif
     </div>
 @endsection
