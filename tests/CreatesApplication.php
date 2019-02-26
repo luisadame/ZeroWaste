@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
+use Laravel\Telescope\Telescope;
 
 trait CreatesApplication
 {
@@ -14,6 +15,8 @@ trait CreatesApplication
     public function createApplication()
     {
         $app = require __DIR__.'/../bootstrap/app.php';
+
+        Telescope::ignoreMigrations();
 
         $app->make(Kernel::class)->bootstrap();
 

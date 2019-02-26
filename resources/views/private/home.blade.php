@@ -7,7 +7,12 @@
         @component('private.components.card')
             @slot('route', route('inventories.index'))
             @slot('title', 'Inventories')
-            @slot('text', 'This is the example text of the Inventory...')
+            @slot('text', 'Manage the edible items you got.')
+        @endcomponent
+        @component('private.components.card')
+            @slot('route', route('recipes.index'))
+            @slot('title', 'Recipes')
+            @slot('text', 'See the recipes people share and add them to your wish diet.')
         @endcomponent
     </div>
 </div>
