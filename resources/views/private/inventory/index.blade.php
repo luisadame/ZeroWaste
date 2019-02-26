@@ -11,6 +11,7 @@
                 @component('private.components.card')
                     @slot('route', route('inventories.show', $inventory))
                     @slot('title', $inventory->name)
+                    @slot('text', 'Contains ' . $inventory->food_count . ' items');
                 @endcomponent
             @empty
                 <p>Nothing to show here</p>

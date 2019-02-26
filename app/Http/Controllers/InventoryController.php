@@ -19,7 +19,7 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        $inventories = auth()->user()->inventories;
+        $inventories = auth()->user()->inventories()->withCount('food')->get();
         return view('private.inventory.index', compact('inventories'));
     }
 
