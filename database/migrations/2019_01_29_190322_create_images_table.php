@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRecipesImagesTable extends Migration
+class CreateImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateRecipesImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('recipes_images', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('url');
+            $table->unsignedInteger('imageable_id');
+            $table->string('imageable_type');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateRecipesImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipes_images');
+        Schema::dropIfExists('iamges');
     }
 }

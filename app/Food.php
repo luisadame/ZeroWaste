@@ -45,6 +45,16 @@ class Food extends Model
     }
 
     /**
+     * Relationship with its images.
+     *
+     * @return void
+     */
+    public function images()
+    {
+        $this->morphMany('App\Image', 'imageable');
+    }
+
+    /**
      * Relationship with its type
      *
      * @return void
