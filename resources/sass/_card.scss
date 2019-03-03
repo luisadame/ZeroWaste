@@ -1,0 +1,16 @@
+.card {
+
+    &:hover {
+        .card-options {
+            opacity: 1;
+        }
+    }
+
+    &-options {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        opacity: 0;
+        transition: opacity 250ms ease-in-out;
+    }
+}
