@@ -3,5 +3,6 @@
 return [
     'about' => 'acerca de',
     'contact' => 'contacto',
-    'inventory' => 'inventorio'
+    'inventory' => 'inventorio',
+    'recipe' => 'receta'
 ];

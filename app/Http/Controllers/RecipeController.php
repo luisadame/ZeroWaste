@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Recipe;
 use Illuminate\Http\Request;
+use App\FoodType;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreRecipe;
 
 class RecipeController extends Controller
 {
@@ -25,7 +28,9 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        //
+        $foodTypes = FoodType::all();
+        $countries = DB::table('countries')->get();
+        return view('private.recipe.create', compact('foodTypes', 'countries'));
     }
 
     /**
@@ -34,9 +39,20 @@ class RecipeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRecipe $request)
     {
-        //
+        $data = $request->validated();
+
+        $recipe = new Recipe();
+        $recipe->user_id = auth()->user()->id;
+        $recipe->fill($data);
+        $recipe->save();
+
+        return redirect(route('recipes.index'))
+            ->with('alert', [
+                'type' => 'success',
+                'content' => "Your recipe \"{$recipe->name}\" was created successfully"
+            ]);
     }
 
     /**

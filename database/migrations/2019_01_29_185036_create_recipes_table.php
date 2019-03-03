@@ -17,7 +17,7 @@ class CreateRecipesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('type_id');
-            $table->unsignedInteger('country_code');
+            $table->string('country_code', 2);
 
             $table->string('name');
             $table->smallInteger('cooking_time');

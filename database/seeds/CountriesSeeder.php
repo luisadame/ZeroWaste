@@ -13,7 +13,7 @@ class CountriesSeeder extends Seeder
      */
     public function run()
     {
-        $countries = include_once resource_path('lang/en/countries.php');
+        $countries = include resource_path('lang/en/countries.php');
 
         $countries = array_map(function ($code) {
             return ['code' => $code];

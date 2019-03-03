@@ -23,10 +23,6 @@ class RecipesTest extends TestCase
         $this->user = User::where('email', 'admin@example.com')->first();
     }
 
-    /**
-     * First let's test the resource methods.
-     */
-
     /** @test */
     public function all_recipes_can_be_retrieved()
     {
@@ -42,5 +38,21 @@ class RecipesTest extends TestCase
 
         // Check if they are on database
         $this->assertDatabaseHas('recipes', $recipes->only('id')->toArray());
+    }
+
+    /** @test */
+    public function a_user_can_create_a_recipe()
+    {
+        $this->disableExceptionHandling();
+        // Log the user in
+        $this->actingAs($this->user);
+
+        // Make recipe data
+        $recipeData = factory(Recipe::class)->make();
+        // Send post request
+        $this->followingRedirects()
+            ->post(route('recipes.store'), $recipeData->toArray())
+            ->assertSuccessful()
+            ->assertSee($recipeData->name);
     }
 }
