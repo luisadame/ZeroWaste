@@ -15,9 +15,12 @@ class CreateFoodTable extends Migration
     {
         Schema::create('food', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('inventory_id');
             $table->string('name');
             $table->date('expiration_date');
             $table->timestamps();
+
+            $table->foreign('inventory_id')->references('id')->on('inventories');
         });
     }
 

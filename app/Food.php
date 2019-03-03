@@ -59,8 +59,8 @@ class Food extends Model
      *
      * @return void
      */
-    public function inventories()
+    public function inventory()
     {
-        return $this->belongsToMany('App\Inventory', 'inventory_food');
+        return $this->belongsTo('App\Inventory');
     }
 }

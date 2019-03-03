@@ -13,14 +13,14 @@ class CreateInventoriesFoodTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventories_food', function (Blueprint $table) {
-            $table->unsignedInteger('inventory_id');
-            $table->unsignedInteger('food_id');
-            $table->timestamps();
+        // Schema::create('inventories_food', function (Blueprint $table) {
+        //     $table->unsignedInteger('inventory_id');
+        //     $table->unsignedInteger('food_id');
+        //     $table->timestamps();
 
-            $table->foreign('inventory_id')->references('id')->on('inventories');
-            $table->foreign('food_id')->references('id')->on('food');
-        });
+        //     $table->foreign('inventory_id')->references('id')->on('inventories');
+        //     $table->foreign('food_id')->references('id')->on('food');
+        // });
     }
 
     /**
@@ -30,6 +30,6 @@ class CreateInventoriesFoodTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventories_food');
+        // Schema::dropIfExists('inventories_food');
     }
 }

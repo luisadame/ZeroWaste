@@ -18,6 +18,6 @@ class Inventory extends Model
 
     public function food()
     {
-        return $this->belongsToMany('App\Food', 'inventory_food');
+        return $this->hasMany('App\Food');
     }
 }

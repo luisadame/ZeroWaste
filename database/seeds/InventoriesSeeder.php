@@ -27,9 +27,7 @@ class InventoriesSeeder extends Seeder
         factory(Inventory::class, 10)
             ->create()
             ->each(function ($inventory) use ($food) {
-                $inventory
-                    ->food()
-                    ->attach($food());
+                factory(App\Food::class, 50)->create(['inventory_id' => $inventory->id]);
             });
     }
 }

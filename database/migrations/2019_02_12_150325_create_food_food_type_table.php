@@ -16,7 +16,7 @@ class CreateFoodFoodTypeTable extends Migration
         Schema::create('food_food_type', function (Blueprint $table) {
             $table->unsignedInteger('food_id');
             $table->unsignedInteger('food_type_id');
-            $table->foreign('food_id')->references('id')->on('food');
+            $table->foreign('food_id')->references('id')->on('food')->onDelete('cascade');
             $table->foreign('food_type_id')->references('id')->on('food_types');
         });
     }
