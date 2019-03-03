@@ -81,6 +81,12 @@ class FoodController extends Controller
      */
     public function destroy(Food $food)
     {
-        //
+        $food->delete();
+
+        return redirect(route('inventories.show', $food->inventory))
+            ->with('alert', [
+                'content' => "{$food->name} was deleted from {$food->inventory->name}",
+                'type' => 'danger'
+            ]);
     }
 }
