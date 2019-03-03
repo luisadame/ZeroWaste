@@ -10,3 +10,4 @@ Route::get('/about', 'ShowAbout')->name('about');
 Route::get('/contact', 'ContactController@index')->name('contact');
 Route::resource('inventories', 'InventoryController');
 Route::resource('recipes', 'RecipeController');
+Route::resource('food', 'FoodController');
