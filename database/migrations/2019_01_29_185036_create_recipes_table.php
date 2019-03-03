@@ -16,14 +16,17 @@ class CreateRecipesTable extends Migration
         Schema::create('recipes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('type_id');
+            $table->unsignedInteger('country_code');
+
             $table->string('name');
             $table->smallInteger('cooking_time');
-            $table->string('origin');
-            $table->unsignedInteger('type');
+            $table->text('content');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('type')->references('id')->on('food_types');
+            $table->foreign('type_id')->references('id')->on('food_types');
+            $table->foreign('country_code')->references('code')->on('countries');
         });
     }
 
