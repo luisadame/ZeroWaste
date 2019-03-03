@@ -14,11 +14,15 @@
             </form>
         </div>
         <h3>Your food items</h3>
+        @include('private.partials.alert')
         <div class="container-fluid grid mt-3 mb-5 p-0">
             @forelse($foodCollection as $food)
                 @component(
-                    'private.components.card',
-                    ['classes' => [$food->expirationProximity()]]
+                    'private.components.food',
+                    [
+                        'classes' => [$food->expirationProximity()],
+                        'food' => $food
+                    ]
                 )
                     @slot('route', '')
                     @slot('title', $food->name)
