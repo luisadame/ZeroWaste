@@ -7,12 +7,15 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Recipe;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class RecipesTest extends TestCase
 {
     use RefreshDatabase;
 
     private $user;
+    private $images;
 
     public function setUp()
     {
@@ -21,6 +24,17 @@ class RecipesTest extends TestCase
         $this->seed(\CountriesSeeder::class);
         $this->seed(\FoodTypeSeeder::class);
         $this->user = User::where('email', 'admin@example.com')->first();
+    }
+
+    /**
+     * This is pretty dangerous imo, but we should never reach the point
+     * of testing on prod server.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        array_map('unlink', glob(storage_path('app/images/') . "*.*"));
     }
 
     /** @test */
@@ -43,16 +57,28 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe()
     {
-        $this->disableExceptionHandling();
         // Log the user in
         $this->actingAs($this->user);
 
+        $this->images = [];
+        for ($i = 0; $i < 5; $i++) {
+            $images[] = UploadedFile::fake()
+                ->image("delicious_omelette{$i}.jpg", 640, 480)
+                ->size(200);
+        }
+
         // Make recipe data
-        $recipeData = factory(Recipe::class)->make();
+        $recipe = factory(Recipe::class)->make();
+        $recipe->images = $images;
+
         // Send post request
         $this->followingRedirects()
-            ->post(route('recipes.store'), $recipeData->toArray())
+            ->post(route('recipes.store'), $recipe->toArray())
             ->assertSuccessful()
-            ->assertSee($recipeData->name);
+            ->assertSee($recipe->name);
+
+        foreach ($images as $image) {
+            $this->assertFileExists(storage_path('app/images/' . $image->hashName()));
+        }
     }
 }
