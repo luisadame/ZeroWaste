@@ -13,7 +13,4 @@ Route::resource('recipes', 'RecipeController');
 Route::resource('food', 'FoodController');
 
 /** Images */
-Route::name('images.')->group(function () {
-    Route::get('/images/{image}', 'ImageController@show')->name('show');
-    Route::post('/images', 'ImageController@store')->name('store');
-});
+Route::get('/images/{image}', 'ImageController@show')->name('images.show');

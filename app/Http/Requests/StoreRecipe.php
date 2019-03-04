@@ -3,10 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Validator;
+use App\Http\Requests\Traits\Imageable;
 
 class StoreRecipe extends FormRequest
 {
+    use Imageable;
+
     /**
      * Determine if the user is authorized to make this request.
      *

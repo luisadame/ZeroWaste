@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\FoodType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRecipe;
+use App\Image;
 
 class RecipeController extends Controller
 {
@@ -43,10 +44,13 @@ class RecipeController extends Controller
     {
         $data = $request->validated();
 
+        $images = array_pull($data, 'images');
+
         $recipe = new Recipe();
         $recipe->user_id = auth()->user()->id;
         $recipe->fill($data);
         $recipe->save();
+        $recipe->saveImages($images);
 
         return redirect(route('recipes.index'))
             ->with('alert', [
