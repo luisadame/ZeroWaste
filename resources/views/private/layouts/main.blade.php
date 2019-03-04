@@ -18,7 +18,7 @@
 
     @include('partials.navbar')
 
-    <main role="main" class="container-fluid">
+    <main role="main" class="container-fluid pb-5">
       @yield('content')
     </main>
 
