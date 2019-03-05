@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
-    protected $visible = ['id', 'url'];
+    protected $visible = ['id', 'path'];
 
     public function imageable()
     {
-        $this->morphTo();
+        return $this->morphTo();
     }
 
     /**
