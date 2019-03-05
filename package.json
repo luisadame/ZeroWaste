@@ -27,5 +27,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "author": "Luis Adame <mrluissan@gmail.com>",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "filepond": "^4.2.0"
+    }
 }

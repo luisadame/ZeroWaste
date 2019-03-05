@@ -9,7 +9,7 @@ trait Imageable
     public function withValidator(Validator $validator)
     {
         $validator->addRules([
-            'images' => 'required|array',
+            'images' => 'array|max:10|min:1',
             'images.*' => [
                 'file',
                 'image',
