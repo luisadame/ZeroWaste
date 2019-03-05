@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Recipe;
+use App\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
@@ -15,7 +16,7 @@ class RecipesTest extends TestCase
     use RefreshDatabase;
 
     private $user;
-    private $images;
+    private $images = [];
 
     public function setUp()
     {
@@ -57,19 +58,28 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe()
     {
+        $this->disableExceptionHandling();
         // Log the user in
         $this->actingAs($this->user);
 
-        $this->images = [];
-        for ($i = 0; $i < 5; $i++) {
-            $images[] = UploadedFile::fake()
-                ->image("delicious_omelette{$i}.jpg", 640, 480)
-                ->size(200);
-        }
-
         // Make recipe data
         $recipe = factory(Recipe::class)->make();
-        $recipe->images = $images;
+
+        // Send post request
+        $this->followingRedirects()
+            ->post(route('recipes.store'), $recipe->toArray())
+            ->assertSuccessful()
+            ->assertSee($recipe->name);
+    }
+
+    /** @test */
+    public function a_user_can_create_a_recipe_with_images()
+    {
+        // Log the user in
+        $this->actingAs($this->user);
+
+        // Make recipe data
+        $recipe = factory(Recipe::class)->states('withImages')->make();
 
         // Send post request
         $this->followingRedirects()
@@ -77,8 +87,12 @@ class RecipesTest extends TestCase
             ->assertSuccessful()
             ->assertSee($recipe->name);
 
-        foreach ($images as $image) {
-            $this->assertFileExists(storage_path('app/images/' . $image->hashName()));
+        // Decode image id and extract the name
+        foreach ($recipe->images as $serverId) {
+            $fullTempPath = (new Image())->getPathFromServerId($serverId);
+            $fileName = explode('/', $fullTempPath);
+            $fileName = $fileName[count($fileName) - 1];
+            Storage::disk('images')->assertExists($fileName);
         }
     }
 }
