@@ -1,7 +1,7 @@
 <?php
 namespace App\Exceptions;
 
-class InvalidPathException extends InvalidArgumentException implements Throwable
+class InvalidPathException extends \InvalidArgumentException implements \Throwable
 {
     /**
      * The given server id when decrypted is not a valid path.
