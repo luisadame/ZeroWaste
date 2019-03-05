@@ -50,7 +50,10 @@ class RecipeController extends Controller
         $recipe->user_id = auth()->user()->id;
         $recipe->fill($data);
         $recipe->save();
-        $recipe->saveImages($images);
+
+        if ($images) {
+            $recipe->saveImages($images);
+        }
 
         return redirect(route('recipes.index'))
             ->with('alert', [
