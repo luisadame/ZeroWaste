@@ -49,6 +49,14 @@ return [
             'visibility' => 'private'
         ],
 
+        /**
+         * Temporary path for image uploading
+         */
+        'temporary' => [
+            'driver' => 'local',
+            'root' => storage_path('app/tmp')
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

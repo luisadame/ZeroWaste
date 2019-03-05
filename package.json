@@ -29,6 +29,7 @@
     "author": "Luis Adame <mrluissan@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "filepond": "^4.2.0"
+        "filepond": "^4.2.0",
+        "filepond-plugin-image-preview": "^4.0.3"
     }
 }

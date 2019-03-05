@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Image;
 use App\Http\Requests\StoreImage;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -12,37 +14,56 @@ class ImageController extends Controller
 
     public function __construct(Image $image)
     {
+        // $this->middleware('auth:api');
         $this->image = $image;
     }
 
     /**
-     * Uploads the file to the temporary directory
-     * and returns an encrypted path to the file
+     * It stores a file in a temporary folder and replies
+     * with an id that references that file that will be moved
+     * eventually.
      *
      * @param StoreImage $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function upload(StoreImage $request)
+    public function store(StoreImage $request)
     {
         $data = $request->validated();
+        $image = $data['images'][0];
+        $filename = $image->store('', 'temporary');
+        $path = Storage::disk('temporary')->path($filename);
 
-        $images = [];
+        return response($this->image->getServerIdFromPath($path), 200)
+            ->header('Content-Type', 'text/plain');
+    }
 
-        foreach ($data['images'] as $image) {
-            $filePath = tempnam(sys_get_temp_dir(), "image");
-            $filePathParts = pathinfo($filePath);
+    /**
+     * It retrieves a file already stored in local disk
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function show(Request $request)
+    {
+        $imagePath = $request->input('load');
+    }
 
-            if (!$image->move($filePathParts['dirname'], $filePathParts['basename'])) {
-                return Response::make('Could not save file', 500);
-            }
+    /**
+     * It retrieves a file stored in temporary folder.
+     */
+    public function restore(Request $request)
+    {
+        $imageId = $request->input('restore');
+    }
 
-            $images[] = $filePath;
-        }
-
-        foreach (range(0, count($images)) as $i) {
-            $images[$i] = $this->image->getServerIdFromPath($images[$i]);
-        }
-
-        return Response::make($this->filepond->getServerIdFromPath($filePath), 200);
+    /**
+     * Destroys a temporary file.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function destroy(Request $request)
+    {
+        $imageId = $request->getContent();
     }
 }

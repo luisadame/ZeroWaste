@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\InvalidPathException;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -41,10 +42,16 @@ class Image extends Model
 
         $path = Crypt::decryptString($serverId);
 
-        if (!Str::startsWith($path, sys_get_temp_dir())) {
+
+        if (!Str::startsWith($path, $this->temporalPath())) {
             throw new InvalidPathException();
         }
 
         return $path;
+    }
+
+    public function temporalPath()
+    {
+        return Storage::disk('temporary')->getAdapter()->getPathPrefix();
     }
 }

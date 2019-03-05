@@ -7,8 +7,6 @@ use App\Http\Requests\Traits\Imageable;
 
 class StoreRecipe extends FormRequest
 {
-    use Imageable;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -31,7 +29,9 @@ class StoreRecipe extends FormRequest
             'type_id' => 'required|integer|exists:food_types,id',
             'cooking_time' => 'required|integer|max:525600',
             'country_code' => 'required|string|size:2|exists:countries,code',
-            'content' => 'required|string|max:10000'
+            'content' => 'required|string|max:10000',
+            'images' => 'array|max:10|min:1',
+            'images.*' => 'string'
         ];
     }
 }

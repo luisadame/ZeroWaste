@@ -11,6 +11,3 @@ Route::get('/contact', 'ContactController@index')->name('contact');
 Route::resource('inventories', 'InventoryController');
 Route::resource('recipes', 'RecipeController');
 Route::resource('food', 'FoodController');
-
-/** Images */
-Route::get('/images/{image}', 'ImageController@show')->name('images.show');

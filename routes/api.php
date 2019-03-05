@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/** Images */
+Route::prefix('images')->group(function () {
+    Route::post('/', 'ImageController@store')->name('images.store'); // process
+    Route::delete('/', 'ImageController@destroy')->name('images.destroy'); // revert
+    Route::get('/{image}', 'ImageController@show')->name('images.show'); // load
+    Route::get('/{serverId}', 'ImageController@restore')->name('images.restore'); // restore
+});

@@ -1,3 +1,5 @@
+import * as FilePond from 'filepond';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -34,3 +36,10 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+FilePond.registerPlugin(FilePondPluginImagePreview);
+FilePond.setOptions({
+    server: '/api/images'
+});
+let dropzones = document.querySelector('.dropzone');
+FilePond.create(dropzones);
