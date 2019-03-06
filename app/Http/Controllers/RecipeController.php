@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\FoodType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRecipe;
-use App\Image;
 
 class RecipeController extends Controller
 {
