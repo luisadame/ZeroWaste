@@ -53,4 +53,9 @@ class Image extends Model
     {
         return Storage::disk('temporary')->getAdapter()->getPathPrefix();
     }
+
+    public function getUrlAttribute()
+    {
+        return Storage::disk('images')->url($this->path);
+    }
 }
