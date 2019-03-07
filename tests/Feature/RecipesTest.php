@@ -3,13 +3,12 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Recipe;
 use App\Image;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Auth\AuthenticationException;
 
 class RecipesTest extends TestCase
 {
@@ -25,6 +24,14 @@ class RecipesTest extends TestCase
         $this->seed(\CountriesSeeder::class);
         $this->seed(\FoodTypeSeeder::class);
         $this->user = User::where('email', 'admin@example.com')->first();
+    }
+
+    /** @test */
+    public function all_recipes_cant_be_retrieved_being_unauthenticated()
+    {
+        $this->disableExceptionHandling();
+        $this->expectException(AuthenticationException::class);
+        $this->get(route('recipes.index'));
     }
 
     /** @test */
@@ -44,6 +51,14 @@ class RecipesTest extends TestCase
 
         // Check if they are on database
         $this->assertDatabaseHas('recipes', $recipes->only('id')->toArray());
+    }
+
+    /** @test */
+    public function unathenticated_user_cant_create_a_recipe()
+    {
+        $this->disableExceptionHandling();
+        $this->expectException(AuthenticationException::class);
+        $this->post(route('recipes.store'));
     }
 
     /** @test */
@@ -85,5 +100,26 @@ class RecipesTest extends TestCase
             Storage::disk('images')->assertExists($fileName);
             Storage::disk('images')->delete($fileName);
         }
+    }
+
+    /** @test */
+    public function unauthenticated_user_cant_see_a_recipe()
+    {
+        $this->disableExceptionHandling();
+        $this->expectException(AuthenticationException::class);
+        $recipe = factory(Recipe::class)->create();
+        $this->get(route('recipes.show', $recipe));
+    }
+
+    /** @test */
+    public function authenticated_user_can_see_a_recipe()
+    {
+        $this->disableExceptionHandling();
+        $this->actingAs($this->user);
+
+        $recipe = factory(Recipe::class)->create();
+        $this->get(route('recipes.show', $recipe))
+            ->assertOk()
+            ->assertSee($recipe->name);
     }
 }
