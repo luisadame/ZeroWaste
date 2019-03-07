@@ -24,16 +24,12 @@ $factory->state(Recipe::class, 'withImages', function (Faker $faker) {
     $images = [];
 
     for ($i = 0; $i < rand(1, 9); $i++) {
-        $path = UploadedFile::fake()
+        $filename = UploadedFile::fake()
             ->image("delicious_omelette{$i}.jpg", 640, 480)
             ->size(200)
             ->store('', 'temporary');
 
-        $path = Storage::disk('temporary')
-            ->getAdapter()
-            ->applyPathPrefix($path);
-
-        $images[] = (new Image())->getServerIdFromPath($path);
+        $images[] = (new Image())->getServerIdFromPath($filename);
     }
 
     return compact('images');

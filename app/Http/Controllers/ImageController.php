@@ -30,9 +30,9 @@ class ImageController extends Controller
         $data = $request->validated();
         $image = $data['images'][0];
         $filename = $image->store('', 'temporary');
-        $path = Storage::disk('temporary')->path($filename);
+        // $path = Storage::disk('temporary')->path($filename);
 
-        return response($this->image->getServerIdFromPath($path), 200)
+        return response($this->image->getServerIdFromPath($filename), 200)
             ->header('Content-Type', 'text/plain');
     }
 
@@ -63,6 +63,13 @@ class ImageController extends Controller
      */
     public function destroy(Request $request)
     {
-        $imageId = $request->getContent();
+        $serverId = $request->getContent();
+        $filename = $this->image->filename($serverId);
+
+        if (Storage::disk('temporary')->delete($filename)) {
+            return response('', 200);
+        } else {
+            return response('Could\'nt delete file', 500);
+        }
     }
 }

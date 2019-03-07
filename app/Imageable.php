@@ -13,18 +13,12 @@ abstract class Imageable extends Model
         $images = array_map(
             function ($serverId) {
                 $image = new Image();
-                $tempPath = $image->getPathFromServerId($serverId);
-                $fileName = sprintf('%s.%s', File::name($tempPath), File::extension($tempPath));
-                $source = Storage::disk('temporary')
-                    ->getDriver()
-                    ->getAdapter()
-                    ->applyPathPrefix($fileName);
-                $dest = Storage::disk('images')
-                    ->getDriver()
-                    ->getAdapter()
-                    ->applyPathPrefix($fileName);
+                $fileName = $image->getPathFromServerId($serverId);
 
-                if (File::move($source, $dest)) {
+                if (File::move(
+                    storage_path('app/tmp/'.$fileName),
+                    storage_path('app/images/'.$fileName)
+                )) {
                     $image->path = $fileName;
                     return $image;
                 }

@@ -36,18 +36,12 @@ class Image extends Model
      */
     public function getPathFromServerId($serverId)
     {
-        if (!trim($serverId)) {
-            throw new InvalidPathException();
-        }
+        return Crypt::decryptString($serverId);
+    }
 
-        $path = Crypt::decryptString($serverId);
-
-
-        if (!Str::startsWith($path, $this->temporalPath())) {
-            throw new InvalidPathException();
-        }
-
-        return $path;
+    public function filename($serverId)
+    {
+        return last(explode('/', $this->getPathFromServerId($serverId)));
     }
 
     public function temporalPath()
