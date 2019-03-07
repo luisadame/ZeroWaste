@@ -45,7 +45,22 @@ FilePond.setOptions({
             headers: {
                 'X-CSRF-TOKEN': token.content
             }
-        }
+        },
+        revert: {
+            headers: {
+                'X-CSRF-TOKEN': token.content
+            }
+        },
+        restore: {
+            headers: {
+                'X-CSRF-TOKEN': token.content
+            }
+        },
+        load: {
+            headers: {
+                'X-CSRF-TOKEN': token.content
+            }
+        },
     }
 });
 let dropzones = document.querySelector('.dropzone');
