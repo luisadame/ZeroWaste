@@ -65,7 +65,7 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe_with_images()
     {
-        Storage::fake('images');
+        $this->disableExceptionHandling();
 
         // Log the user in
         $this->actingAs($this->user);
@@ -81,9 +81,9 @@ class RecipesTest extends TestCase
 
         // Decode image id and extract the name
         foreach ($recipe->images as $serverId) {
-            $fullTempPath = (new Image())->getPathFromServerId($serverId);
-            $fileName = last(explode('/', $fullTempPath));
+            $fileName = (new Image())->getPathFromServerId($serverId);
             Storage::disk('images')->assertExists($fileName);
+            Storage::disk('images')->delete($fileName);
         }
     }
 }
