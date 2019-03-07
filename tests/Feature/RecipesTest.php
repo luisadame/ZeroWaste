@@ -27,20 +27,11 @@ class RecipesTest extends TestCase
         $this->user = User::where('email', 'admin@example.com')->first();
     }
 
-    /**
-     * This is pretty dangerous imo, but we should never reach the point
-     * of testing on prod server.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        array_map('unlink', glob(storage_path('app/images/') . "*.*"));
-    }
-
     /** @test */
     public function all_recipes_can_be_retrieved()
     {
+        $this->actingAs($this->user);
+
         // Create a bunch of recipes
         $recipes = factory(Recipe::class, 20)->create();
 
@@ -58,7 +49,6 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe()
     {
-        $this->disableExceptionHandling();
         // Log the user in
         $this->actingAs($this->user);
 
@@ -75,6 +65,8 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe_with_images()
     {
+        Storage::fake('images');
+
         // Log the user in
         $this->actingAs($this->user);
 
@@ -90,8 +82,7 @@ class RecipesTest extends TestCase
         // Decode image id and extract the name
         foreach ($recipe->images as $serverId) {
             $fullTempPath = (new Image())->getPathFromServerId($serverId);
-            $fileName = explode('/', $fullTempPath);
-            $fileName = $fileName[count($fileName) - 1];
+            $fileName = last(explode('/', $fullTempPath));
             Storage::disk('images')->assertExists($fileName);
         }
     }
