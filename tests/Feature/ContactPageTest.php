@@ -8,13 +8,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ContactPageTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    /** @test */
+    public function it_shows_the_contact_page()
     {
-        $this->assertTrue(true);
+        $this->get(route('contact'))
+            ->assertSuccessful()
+            ->assertSee('Contact');
     }
 }
