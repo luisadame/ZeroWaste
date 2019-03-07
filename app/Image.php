@@ -36,7 +36,12 @@ class Image extends Model
      */
     public function getPathFromServerId($serverId)
     {
-        return Crypt::decryptString($serverId);
+        $filename = Crypt::decryptString($serverId);
+
+        if (Storage::disk('temporary')->exists($filename)
+            || Storage::disk('images')->exists($filename)) {
+            return $filename;
+        }
     }
 
     public function filename($serverId)

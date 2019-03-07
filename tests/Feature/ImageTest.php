@@ -39,7 +39,7 @@ class ImageTest extends TestCase
         return $images;
     }
 
-    public function ajaxWithContent($method, $uri, $content = '')
+    private function ajaxWithContent($method, $uri, $content = '', $parameters = [])
     {
         $headers = [
             'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
@@ -50,7 +50,7 @@ class ImageTest extends TestCase
         return $this->call(
             $method,
             $uri,
-            [],
+            $parameters,
             [],
             [],
             $this->transformHeadersToServerVars($headers),
@@ -71,7 +71,6 @@ class ImageTest extends TestCase
     /** @test */
     public function authenticated_user_can_upload_images()
     {
-        $this->disableExceptionHandling();
         Storage::fake('temporary');
 
         $this->actingAs($this->user);
@@ -131,5 +130,61 @@ class ImageTest extends TestCase
                 ->assertOk();
             Storage::disk('temporary')->assertMissing($this->image->filename($serverId));
         }
+    }
+
+    /** @test */
+    public function unauthorized_user_cant_restore_a_temporal_image()
+    {
+        $this->ajaxWithContent('GET', route('images.show'), '', ['restore' => '12345'])
+            ->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /** @test */
+    public function authorized_user_can_restore_a_temporal_image()
+    {
+        Storage::fake('temporary');
+
+        $this->actingAs($this->user);
+
+        $images = [];
+        foreach ($this->images() as $fakeImage) {
+            $path = $fakeImage->store('', 'temporary');
+            $images[] = [
+                'id' => $this->image->getServerIdFromPath($path),
+                'path' => $path
+            ];
+        }
+
+        $this->get(route('images.show', ['restore' => $images[0]['id']]))
+            ->assertSuccessful()
+            ->assertHeader('Content-Disposition', sprintf('inline; filename="%s"', $images[0]['path']));
+    }
+
+    /** @test */
+    public function unauthorized_user_cant_load_a_saved_image()
+    {
+        $this->ajaxWithContent('GET', route('images.show'), '', ['load' => '12345'])
+            ->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /** @test */
+    public function authorized_user_can_load_a_saved_image()
+    {
+        Storage::fake('images');
+
+        $this->actingAs($this->user);
+
+        $images = [];
+        foreach ($this->images() as $fakeImage) {
+            $path = $fakeImage->store('', 'images');
+            $images[] = [
+                'id' => $this->image->getServerIdFromPath($path),
+                'path' => $path
+            ];
+        }
+
+        $this->get(route('images.show', ['load' => $images[0]['id']]))
+            ->assertSuccessful()
+            ->assertHeader('Content-Disposition', sprintf('inline; filename="%s"', $images[0]['path']));
     }
 }

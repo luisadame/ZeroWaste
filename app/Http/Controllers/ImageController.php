@@ -44,15 +44,24 @@ class ImageController extends Controller
      */
     public function show(Request $request)
     {
-        $imagePath = $request->input('load');
+        $this->validate($request, [
+            'restore' => 'sometimes|required|string',
+            'load' => 'sometimes|required|string'
+        ]);
+        $disk = $request->has('restore') ? 'temporary' : 'images';
+        return $this->file($disk, $request->input('restore') ?? $request->input('load'));
     }
 
-    /**
-     * It retrieves a file stored in temporary folder.
-     */
-    public function restore(Request $request)
+    private function file($disk, $id)
     {
-        $imageId = $request->input('restore');
+        if (!$id) {
+            return;
+        }
+        $filename = (new Image)->getPathFromServerId($id);
+        $file = Storage::disk($disk)->get($filename);
+        return response($file, 200, [
+            'Content-Disposition' => sprintf('inline; filename="%s"', $filename)
+        ]);
     }
 
     /**
