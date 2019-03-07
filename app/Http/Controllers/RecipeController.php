@@ -69,7 +69,8 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        //
+        $recipe->load('images');
+        return view('private.recipe.show', compact('recipe'));
     }
 
     /**
