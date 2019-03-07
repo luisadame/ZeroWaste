@@ -14,7 +14,6 @@ class ImageController extends Controller
 
     public function __construct(Image $image)
     {
-        // $this->middleware('auth:api');
         $this->image = $image;
     }
 
