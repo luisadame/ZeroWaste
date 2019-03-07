@@ -36,6 +36,6 @@ abstract class Imageable extends Model
      */
     public function images()
     {
-        return $this->morphMany(get_class($this), 'imageable');
+        return $this->morphMany('App\Image', 'imageable');
     }
 }
