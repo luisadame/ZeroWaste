@@ -133,7 +133,7 @@ class ImageTest extends TestCase
     }
 
     /** @test */
-    public function unauthorized_user_cant_restore_a_temporal_image()
+    public function unauthenticated_user_cant_restore_a_temporal_image()
     {
         $this->ajaxWithContent('GET', route('images.show'), '', ['restore' => '12345'])
             ->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -161,7 +161,7 @@ class ImageTest extends TestCase
     }
 
     /** @test */
-    public function unauthorized_user_cant_load_a_saved_image()
+    public function unauthenticated_user_cant_load_a_saved_image()
     {
         $this->ajaxWithContent('GET', route('images.show'), '', ['load' => '12345'])
             ->assertStatus(Response::HTTP_UNAUTHORIZED);
