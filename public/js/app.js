@@ -30641,7 +30641,14 @@ if (token) {
 
 filepond__WEBPACK_IMPORTED_MODULE_0__["registerPlugin"](filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1___default.a);
 filepond__WEBPACK_IMPORTED_MODULE_0__["setOptions"]({
-  server: '/api/images'
+  server: {
+    url: '/images',
+    process: {
+      headers: {
+        'X-CSRF-TOKEN': token.content
+      }
+    }
+  }
 });
 var dropzones = document.querySelector('.dropzone');
 filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones);

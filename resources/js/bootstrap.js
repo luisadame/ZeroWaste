@@ -39,7 +39,14 @@ if (token) {
 
 FilePond.registerPlugin(FilePondPluginImagePreview);
 FilePond.setOptions({
-    server: '/api/images'
+    server: {
+        url: '/images',
+        process: {
+            headers: {
+                'X-CSRF-TOKEN': token.content
+            }
+        }
+    }
 });
 let dropzones = document.querySelector('.dropzone');
 FilePond.create(dropzones);
