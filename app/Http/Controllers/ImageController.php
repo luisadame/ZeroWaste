@@ -30,7 +30,6 @@ class ImageController extends Controller
         $data = $request->validated();
         $image = $data['images'][0];
         $filename = $image->store('', 'temporary');
-        // $path = Storage::disk('temporary')->path($filename);
 
         return response($this->image->getServerIdFromPath($filename), 200)
             ->header('Content-Type', 'text/plain');

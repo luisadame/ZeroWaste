@@ -25,9 +25,9 @@
                 </div>
             @endforeach
         </h4>
-        @foreach($recipe->images as $image)
-            <img src="{{ $image->url }}" width="100%"/>
-        @endforeach
+        @if($recipe->images->isNotEmpty())
+            @component('private.components.recipe-showcase', ['images' => $recipe->images]) @endcomponent
+        @endif
         <p>Origin: {{ __("countries.{$recipe->country_code}") }}</p>
         <div class="content">
             {{ $recipe->content }}
