@@ -1,5 +1,7 @@
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginImageValidateSize from 'filepond-plugin-image-validate-size';
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -37,31 +39,28 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-FilePond.registerPlugin(FilePondPluginImagePreview);
+FilePond.registerPlugin(
+    FilePondPluginImagePreview,
+    FilePondPluginImageValidateSize,
+    FilePondPluginFileValidateType
+);
 FilePond.setOptions({
+    maxFiles: 10,
     server: {
         url: '/images',
-        process: {
-            headers: {
-                'X-CSRF-TOKEN': token.content
-            }
-        },
-        revert: {
-            headers: {
-                'X-CSRF-TOKEN': token.content
-            }
-        },
-        restore: {
-            headers: {
-                'X-CSRF-TOKEN': token.content
-            }
-        },
-        load: {
-            headers: {
-                'X-CSRF-TOKEN': token.content
-            }
-        },
+        ...['process', 'revert', 'restore', 'load'].reduce((obj, item) => {
+            obj[item] = { headers: { 'X-CSRF-TOKEN': token.content }};
+            return obj;
+        }, {})
     }
 });
 let dropzones = document.querySelector('.dropzone');
-FilePond.create(dropzones);
+FilePond.create(dropzones, {
+    acceptedFileTypes: [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+    ],
+    imageValidateSizeMinWidth: 640,
+    imageValidateSizeMinHeight: 480
+});

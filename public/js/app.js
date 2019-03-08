@@ -6199,6 +6199,255 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js ***!
+  \****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * FilePondPluginFileValidateType 1.2.2
+ * Licensed under MIT, https://opensource.org/licenses/MIT
+ * Please visit https://pqina.nl/filepond for details.
+ */
+
+/* eslint-disable */
+(function(global, factory) {
+   true
+    ? (module.exports = factory())
+    : undefined;
+})(this, function() {
+  'use strict';
+
+  var plugin$1 = function(_ref) {
+    var addFilter = _ref.addFilter,
+      utils = _ref.utils;
+
+    // get quick reference to Type utils
+    var Type = utils.Type,
+      isString = utils.isString,
+      replaceInString = utils.replaceInString,
+      guesstimateMimeType = utils.guesstimateMimeType,
+      getExtensionFromFilename = utils.getExtensionFromFilename,
+      getFilenameFromURL = utils.getFilenameFromURL;
+
+    var mimeTypeMatchesWildCard = function mimeTypeMatchesWildCard(
+      mimeType,
+      wildcard
+    ) {
+      var mimeTypeGroup = (/^[^/]+/.exec(mimeType) || []).pop(); // image/png -> image
+      var wildcardGroup = wildcard.slice(0, -2); // image/* -> image
+      return mimeTypeGroup === wildcardGroup;
+    };
+
+    var isValidMimeType = function isValidMimeType(
+      acceptedTypes,
+      userInputType
+    ) {
+      return acceptedTypes.some(function(acceptedType) {
+        // accepted is wildcard mime type
+        if (/\*$/.test(acceptedType)) {
+          return mimeTypeMatchesWildCard(userInputType, acceptedType);
+        }
+
+        // is normal mime type
+        return acceptedType === userInputType;
+      });
+    };
+
+    var getItemType = function getItemType(item) {
+      // if the item is a url we guess the mime type by the extension
+      var type = '';
+      if (isString(item)) {
+        var filename = getFilenameFromURL(item);
+        var extension = getExtensionFromFilename(filename);
+        if (extension) {
+          type = guesstimateMimeType(extension);
+        }
+      } else {
+        type = item.type;
+      }
+
+      return type;
+    };
+
+    var validateFile = function validateFile(
+      item,
+      acceptedFileTypes,
+      typeDetector
+    ) {
+      // no types defined, everything is allowed \o/
+      if (acceptedFileTypes.length === 0) {
+        return true;
+      }
+
+      // gets the item type
+      var type = getItemType(item);
+
+      // no type detector, test now
+      if (!typeDetector) {
+        return isValidMimeType(acceptedFileTypes, type);
+      }
+
+      // use type detector
+      return new Promise(function(resolve, reject) {
+        typeDetector(item, type)
+          .then(function(detectedType) {
+            if (isValidMimeType(acceptedFileTypes, detectedType)) {
+              resolve();
+            } else {
+              reject();
+            }
+          })
+          .catch(reject);
+      });
+    };
+
+    var applyMimeTypeMap = function applyMimeTypeMap(map) {
+      return function(acceptedFileType) {
+        return map[acceptedFileType] === null
+          ? false
+          : map[acceptedFileType] || acceptedFileType;
+      };
+    };
+
+    // setup attribute mapping for accept
+    addFilter('SET_ATTRIBUTE_TO_OPTION_MAP', function(map) {
+      return Object.assign(map, {
+        accept: 'acceptedFileTypes'
+      });
+    });
+
+    // filtering if an item is allowed in hopper
+    addFilter('ALLOW_HOPPER_ITEM', function(file, _ref2) {
+      var query = _ref2.query;
+
+      // if we are not doing file type validation exit
+      if (!query('GET_ALLOW_FILE_TYPE_VALIDATION')) {
+        return true;
+      }
+
+      // we validate the file against the accepted file types
+      return validateFile(file, query('GET_ACCEPTED_FILE_TYPES'));
+    });
+
+    // called for each file that is loaded
+    // right before it is set to the item state
+    // should return a promise
+    addFilter('LOAD_FILE', function(file, _ref3) {
+      var query = _ref3.query;
+      return new Promise(function(resolve, reject) {
+        if (!query('GET_ALLOW_FILE_TYPE_VALIDATION')) {
+          resolve(file);
+          return;
+        }
+
+        var acceptedFileTypes = query('GET_ACCEPTED_FILE_TYPES');
+
+        // custom type detector method
+        var typeDetector = query('GET_FILE_VALIDATE_TYPE_DETECT_TYPE');
+
+        // if invalid, exit here
+        var validationResult = validateFile(
+          file,
+          acceptedFileTypes,
+          typeDetector
+        );
+
+        var handleRejection = function handleRejection() {
+          var acceptedFileTypesMapped = acceptedFileTypes
+            .map(
+              applyMimeTypeMap(
+                query('GET_FILE_VALIDATE_TYPE_LABEL_EXPECTED_TYPES_MAP')
+              )
+            )
+            .filter(function(label) {
+              return label !== false;
+            });
+
+          reject({
+            status: {
+              main: query('GET_LABEL_FILE_TYPE_NOT_ALLOWED'),
+              sub: replaceInString(
+                query('GET_FILE_VALIDATE_TYPE_LABEL_EXPECTED_TYPES'),
+                {
+                  allTypes: acceptedFileTypesMapped.join(', '),
+                  allButLastType: acceptedFileTypesMapped
+                    .slice(0, -1)
+                    .join(', '),
+                  lastType:
+                    acceptedFileTypesMapped[acceptedFileTypesMapped.length - 1]
+                }
+              )
+            }
+          });
+        };
+
+        // has returned new filename immidiately
+        if (typeof validationResult === 'boolean') {
+          if (!validationResult) {
+            return handleRejection();
+          }
+          return resolve(file);
+        }
+
+        // is promise
+        validationResult
+          .then(function() {
+            resolve(file);
+          })
+          .catch(handleRejection);
+      });
+    });
+
+    // expose plugin
+    return {
+      // default options
+      options: {
+        // Enable or disable file type validation
+        allowFileTypeValidation: [true, Type.BOOLEAN],
+
+        // What file types to accept
+        acceptedFileTypes: [[], Type.ARRAY],
+        // - must be comma separated
+        // - mime types: image/png, image/jpeg, image/gif
+        // - extensions: .png, .jpg, .jpeg ( not enabled yet )
+        // - wildcards: image/*
+
+        // label to show when a type is not allowed
+        labelFileTypeNotAllowed: ['File is of invalid type', Type.STRING],
+
+        // nicer label
+        fileValidateTypeLabelExpectedTypes: [
+          'Expects {allButLastType} or {lastType}',
+          Type.STRING
+        ],
+
+        // map mime types to extensions
+        fileValidateTypeLabelExpectedTypesMap: [{}, Type.OBJECT],
+
+        // Custom function to detect type of file
+        fileValidateTypeDetectType: [null, Type.FUNCTION]
+      }
+    };
+  };
+
+  var isBrowser =
+    typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
+  if (isBrowser) {
+    document.dispatchEvent(
+      new CustomEvent('FilePond:pluginloaded', { detail: plugin$1 })
+    );
+  }
+
+  return plugin$1;
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js":
 /*!******************************************************************************************!*\
   !*** ./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js ***!
@@ -7433,6 +7682,275 @@ module.exports = {
 
         // Enables or disables reading average image color
         imagePreviewCalculateAverageImageColor: [false, Type.BOOLEAN]
+      }
+    };
+  };
+
+  var isBrowser =
+    typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
+  if (isBrowser) {
+    document.dispatchEvent(
+      new CustomEvent('FilePond:pluginloaded', { detail: plugin$1 })
+    );
+  }
+
+  return plugin$1;
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js ***!
+  \******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * FilePondPluginImageValidateSize 1.2.1
+ * Licensed under MIT, https://opensource.org/licenses/MIT
+ * Please visit https://pqina.nl/filepond for details.
+ */
+
+/* eslint-disable */
+(function(global, factory) {
+   true
+    ? (module.exports = factory())
+    : undefined;
+})(this, function() {
+  'use strict';
+
+  // test if file is of type image
+  var isImage = function isImage(file) {
+    return /^image/.test(file.type);
+  };
+
+  var getImageSize = function getImageSize(file) {
+    return new Promise(function(resolve, reject) {
+      var image = document.createElement('img');
+      image.src = URL.createObjectURL(file);
+      image.onerror = function(err) {
+        clearInterval(intervalId);
+        reject(err);
+      };
+      var intervalId = setInterval(function() {
+        if (image.naturalWidth && image.naturalHeight) {
+          clearInterval(intervalId);
+          URL.revokeObjectURL(image.src);
+          resolve({
+            width: image.naturalWidth,
+            height: image.naturalHeight
+          });
+        }
+      }, 1);
+    });
+  };
+
+  var plugin$1 = function(_ref) {
+    var addFilter = _ref.addFilter,
+      utils = _ref.utils;
+
+    // get quick reference to Type utils
+    var Type = utils.Type,
+      replaceInString = utils.replaceInString,
+      isFile = utils.isFile;
+
+    // required file size
+
+    var validateFile = function validateFile(file, bounds, measure) {
+      return new Promise(function(resolve, reject) {
+        var onReceiveSize = function onReceiveSize(_ref2) {
+          var width = _ref2.width,
+            height = _ref2.height;
+          var minWidth = bounds.minWidth,
+            minHeight = bounds.minHeight,
+            maxWidth = bounds.maxWidth,
+            maxHeight = bounds.maxHeight,
+            minResolution = bounds.minResolution,
+            maxResolution = bounds.maxResolution;
+
+          var resolution = width * height;
+
+          // validation result
+          if (width < minWidth || height < minHeight) {
+            reject('TOO_SMALL');
+          } else if (width > maxWidth || height > maxHeight) {
+            reject('TOO_BIG');
+          } else if (minResolution !== null && resolution < minResolution) {
+            reject('TOO_LOW_RES');
+          } else if (maxResolution !== null && resolution > maxResolution) {
+            reject('TOO_HIGH_RES');
+          }
+
+          // all is well
+          resolve();
+        };
+
+        getImageSize(file)
+          .then(onReceiveSize)
+          .catch(function() {
+            // no custom measure method supplied, exit here
+            if (!measure) {
+              reject();
+              return;
+            }
+
+            // try fallback if defined by user, else reject
+            measure(file, bounds)
+              .then(onReceiveSize)
+              .catch(function() {
+                return reject();
+              });
+          });
+      });
+    };
+
+    // called for each file that is loaded
+    // right before it is set to the item state
+    // should return a promise
+    addFilter('LOAD_FILE', function(file, _ref3) {
+      var query = _ref3.query;
+      return new Promise(function(resolve, reject) {
+        if (
+          !isFile(file) ||
+          !isImage(file) ||
+          !query('GET_ALLOW_IMAGE_VALIDATE_SIZE')
+        ) {
+          resolve(file);
+          return;
+        }
+
+        // get required dimensions
+        var bounds = {
+          minWidth: query('GET_IMAGE_VALIDATE_SIZE_MIN_WIDTH'),
+          minHeight: query('GET_IMAGE_VALIDATE_SIZE_MIN_HEIGHT'),
+          maxWidth: query('GET_IMAGE_VALIDATE_SIZE_MAX_WIDTH'),
+          maxHeight: query('GET_IMAGE_VALIDATE_SIZE_MAX_HEIGHT'),
+          minResolution: query('GET_IMAGE_VALIDATE_SIZE_MIN_RESOLUTION'),
+          maxResolution: query('GET_IMAGE_VALIDATE_SIZE_MAX_RESOLUTION')
+        };
+
+        // get optional custom measure function
+        var measure = query('GET_IMAGE_VALIDATE_SIZE_MEASURE');
+
+        validateFile(file, bounds, measure)
+          .then(function() {
+            resolve(file);
+          })
+          .catch(function(error) {
+            var status = error
+              ? {
+                  TOO_SMALL: {
+                    label: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_IMAGE_SIZE_TOO_SMALL'
+                    ),
+                    details: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_EXPECTED_MIN_SIZE'
+                    )
+                  },
+                  TOO_BIG: {
+                    label: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_IMAGE_SIZE_TOO_BIG'
+                    ),
+                    details: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_EXPECTED_MAX_SIZE'
+                    )
+                  },
+                  TOO_LOW_RES: {
+                    label: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_IMAGE_RESOLUTION_TOO_LOW'
+                    ),
+                    details: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_EXPECTED_MIN_RESOLUTION'
+                    )
+                  },
+                  TOO_HIGH_RES: {
+                    label: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_IMAGE_RESOLUTION_TOO_HIGH'
+                    ),
+                    details: query(
+                      'GET_IMAGE_VALIDATE_SIZE_LABEL_EXPECTED_MAX_RESOLUTION'
+                    )
+                  }
+                }[error]
+              : {
+                  label: query('GET_IMAGE_VALIDATE_SIZE_LABEL_FORMAT_ERROR'),
+                  details: file.type
+                };
+
+            reject({
+              status: {
+                main: status.label,
+                sub: error
+                  ? replaceInString(status.details, bounds)
+                  : status.details
+              }
+            });
+          });
+      });
+    });
+
+    // expose plugin
+    return {
+      // default options
+      options: {
+        // Enable or disable file type validation
+        allowImageValidateSize: [true, Type.BOOLEAN],
+
+        // Error thrown when image can not be loaded
+        imageValidateSizeLabelFormatError: [
+          'Image type not supported',
+          Type.STRING
+        ],
+
+        // Custom function to use as image measure
+        imageValidateSizeMeasure: [null, Type.FUNCTION],
+
+        // Required amount of pixels in the image
+        imageValidateSizeMinResolution: [null, Type.INT],
+        imageValidateSizeMaxResolution: [null, Type.INT],
+        imageValidateSizeLabelImageResolutionTooLow: [
+          'Resolution is too low',
+          Type.STRING
+        ],
+        imageValidateSizeLabelImageResolutionTooHigh: [
+          'Resolution is too high',
+          Type.STRING
+        ],
+        imageValidateSizeLabelExpectedMinResolution: [
+          'Minimum resolution is {minResolution}',
+          Type.STRING
+        ],
+        imageValidateSizeLabelExpectedMaxResolution: [
+          'Maximum resolution is {maxResolution}',
+          Type.STRING
+        ],
+
+        // Required dimensions
+        imageValidateSizeMinWidth: [1, Type.INT], // needs to be at least one pixel
+        imageValidateSizeMinHeight: [1, Type.INT],
+        imageValidateSizeMaxWidth: [65535, Type.INT], // maximum size of JPEG, fine for now I guess
+        imageValidateSizeMaxHeight: [65535, Type.INT],
+
+        // Label to show when an image is too small or image is too big
+        imageValidateSizeLabelImageSizeTooSmall: [
+          'Image is too small',
+          Type.STRING
+        ],
+        imageValidateSizeLabelImageSizeTooBig: [
+          'Image is too big',
+          Type.STRING
+        ],
+        imageValidateSizeLabelExpectedMinSize: [
+          'Minimum size is {minWidth} × {minHeight}',
+          Type.STRING
+        ],
+        imageValidateSizeLabelExpectedMaxSize: [
+          'Maximum size is {maxWidth} × {maxHeight}',
+          Type.STRING
+        ]
       }
     };
   };
@@ -30602,6 +31120,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var filepond__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(filepond__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! filepond-plugin-image-preview */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js");
 /* harmony import */ var filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var filepond_plugin_image_validate_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! filepond-plugin-image-validate-size */ "./node_modules/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js");
+/* harmony import */ var filepond_plugin_image_validate_size__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_image_validate_size__WEBPACK_IMPORTED_MODULE_3__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
 
 
 /**
@@ -30639,34 +31167,26 @@ if (token) {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-filepond__WEBPACK_IMPORTED_MODULE_0__["registerPlugin"](filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1___default.a);
+filepond__WEBPACK_IMPORTED_MODULE_0__["registerPlugin"](filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1___default.a, filepond_plugin_image_validate_size__WEBPACK_IMPORTED_MODULE_3___default.a, filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_2___default.a);
 filepond__WEBPACK_IMPORTED_MODULE_0__["setOptions"]({
-  server: {
-    url: '/images',
-    process: {
+  maxFiles: 10,
+  server: _objectSpread({
+    url: '/images'
+  }, ['process', 'revert', 'restore', 'load'].reduce(function (obj, item) {
+    obj[item] = {
       headers: {
         'X-CSRF-TOKEN': token.content
       }
-    },
-    revert: {
-      headers: {
-        'X-CSRF-TOKEN': token.content
-      }
-    },
-    restore: {
-      headers: {
-        'X-CSRF-TOKEN': token.content
-      }
-    },
-    load: {
-      headers: {
-        'X-CSRF-TOKEN': token.content
-      }
-    }
-  }
+    };
+    return obj;
+  }, {}))
 });
 var dropzones = document.querySelector('.dropzone');
-filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones);
+filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones, {
+  acceptedFileTypes: ['image/jpeg', 'image/png', 'image/webp'],
+  imageValidateSizeMinWidth: 640,
+  imageValidateSizeMinHeight: 480
+});
 
 /***/ }),
 
