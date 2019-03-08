@@ -14,11 +14,24 @@
             <button class="btn btn-link">Delete</button>
         </form>
     </div>
-    <div class="container-fluid grid mt-3 mb-5 p-0">
+    <div class="container-fluid mt-3 mb-5 p-0">
         <h3>{{ $recipe->name }}</h3>
+        <h4>Cooking time: {{ $recipe->time() }}</h4>
+        <h4>
+            Suitable for:
+            @foreach($recipe->types as $type)
+                <div class="badge badge-pill badge-dark">
+                    {{ $type->value }}
+                </div>
+            @endforeach
+        </h4>
         @foreach($recipe->images as $image)
             <img src="{{ $image->url }}" width="100%"/>
         @endforeach
+        <p>Origin: {{ __("countries.{$recipe->country_code}") }}</p>
+        <div class="content">
+            {{ $recipe->content }}
+        </div>
     </div>
 </div>
 @endsection
