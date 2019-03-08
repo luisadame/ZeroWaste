@@ -9,6 +9,7 @@ use App\Recipe;
 use App\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Support\Facades\DB;
 
 class RecipesTest extends TestCase
 {
@@ -24,6 +25,11 @@ class RecipesTest extends TestCase
         $this->seed(\CountriesSeeder::class);
         $this->seed(\FoodTypeSeeder::class);
         $this->user = User::where('email', 'admin@example.com')->first();
+    }
+
+    private function getTypes()
+    {
+        return DB::table('food_types')->inRandomOrder()->limit(rand(1, 4))->select('id')->get();
     }
 
     /** @test */
@@ -69,10 +75,12 @@ class RecipesTest extends TestCase
 
         // Make recipe data
         $recipe = factory(Recipe::class)->make();
+        $type_ids = ['type_ids' => $this->getTypes()->pluck('id')->toArray()];
+        $data = array_merge($recipe->toArray(), $type_ids);
 
         // Send post request
         $this->followingRedirects()
-            ->post(route('recipes.store'), $recipe->toArray())
+            ->post(route('recipes.store'), $data)
             ->assertSuccessful()
             ->assertSee($recipe->name);
     }
@@ -87,10 +95,12 @@ class RecipesTest extends TestCase
 
         // Make recipe data
         $recipe = factory(Recipe::class)->states('withImages')->make();
+        $type_ids = ['type_ids' => $this->getTypes()->pluck('id')->toArray()];
+        $data = array_merge($recipe->toArray(), $type_ids);
 
         // Send post request
         $this->followingRedirects()
-            ->post(route('recipes.store'), $recipe->toArray())
+            ->post(route('recipes.store'), $data)
             ->assertSuccessful()
             ->assertSee($recipe->name);
 

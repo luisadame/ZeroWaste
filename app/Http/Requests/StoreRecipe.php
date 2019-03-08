@@ -26,7 +26,8 @@ class StoreRecipe extends FormRequest
     {
         return [
             'name' => 'required|string|max:200',
-            'type_id' => 'required|integer|exists:food_types,id',
+            'type_ids' => 'required|array|min:1',
+            'type_ids.*' => 'integer|exists:food_types,id',
             'cooking_time' => 'required|integer|max:525600',
             'country_code' => 'required|string|size:2|exists:countries,code',
             'content' => 'required|string|max:10000',

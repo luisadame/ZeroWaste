@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Recipe;
+use Illuminate\Support\Facades\DB;
 
 class RecipesSeeder extends Seeder
 {
@@ -12,6 +13,14 @@ class RecipesSeeder extends Seeder
      */
     public function run()
     {
-        factory(Recipe::class, 20)->create();
+        factory(Recipe::class, 20)->create()
+            ->each(function ($recipe) {
+                $type_ids = DB::table('food_types')
+                    ->inRandomOrder()
+                    ->limit(rand(1, 4))
+                    ->select('id')->get()
+                    ->pluck('id');
+                $recipe->types()->attach($type_ids);
+            });
     }
 }

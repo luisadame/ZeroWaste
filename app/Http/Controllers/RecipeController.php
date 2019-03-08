@@ -44,11 +44,14 @@ class RecipeController extends Controller
         $data = $request->validated();
 
         $images = array_pull($data, 'images');
+        $types = array_pull($data, 'type_ids');
 
         $recipe = new Recipe();
         $recipe->user_id = auth()->user()->id;
         $recipe->fill($data);
         $recipe->save();
+
+        $recipe->types()->attach($types);
 
         if ($images) {
             $recipe->saveImages($images);

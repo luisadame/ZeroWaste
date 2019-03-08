@@ -9,7 +9,7 @@
             @method('post')
             <div class="form-group">
                 <label for="name">Name of your recipe</label>
-                <input class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name" aria-describedby="nameHelp" placeholder="Enter name" value="{{ old('email') }}">
+                <input class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name" aria-describedby="nameHelp" placeholder="Enter name" value="{{ old('name') }}">
                 <small id="nameHelp" class="form-text text-muted">
                     This is the name of your recipe.
                 </small>
@@ -23,19 +23,19 @@
             <div class="row">
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="type_id">What kind of meal is?</label>
-                        <select class="form-control{{ $errors->has('type_id') ? ' is-invalid' : '' }}" name="type_id" id="type_id" aria-describedby="foodTypeHelp" value="{{ old('type_id') }}">
+                        <label for="type_ids">What kind of meal is?</label>
+                        <select multiple class="form-control{{ $errors->has('type_ids') ? ' is-invalid' : '' }}" name="type_ids[]" id="type_ids" aria-describedby="foodTypeHelp" value="{{ old('type_ids') }}">
                             @foreach ($foodTypes as $foodType)
                             <option value="{{ $foodType->id }}">{{ $foodType->value }}</option>
                             @endforeach
                         </select>
                         <small id="foodTypeHelp" class="form-text text-muted">
-                            Is it dinner? Or is it a delicious dessert? Select the type from the list.
+                            Is it dinner? Or is it a delicious dessert? Select multiple types from the list.
                         </small>
 
-                        @if($errors->has('type_id'))
+                        @if($errors->has('type_ids'))
                         <div class="invalid-feedback">
-                            {{ $errors->first('type_id') }}
+                            {{ $errors->first('type_ids') }}
                         </div>
                         @endif
                     </div>

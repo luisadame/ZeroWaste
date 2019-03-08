@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class FoodType extends Model
 {
+    public function recipes()
+    {
+        return $this->morphedByMany('App\Recipe', 'typeable');
+    }
+
     public function food()
     {
-        return $this->hasMany('App\Food', 'food_food_type');
+        return $this->morphedByMany('App\Food', 'typeable');
     }
 }

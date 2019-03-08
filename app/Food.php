@@ -61,7 +61,7 @@ class Food extends Model
      */
     public function types()
     {
-        return $this->belongsToMany('App\FoodType', 'food_food_type');
+        return $this->morphToMany('App\FoodType', 'typeable');
     }
 
     /**
