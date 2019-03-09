@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Recipe;
-use Illuminate\Http\Request;
 use App\FoodType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRecipe;
@@ -84,7 +83,10 @@ class RecipeController extends Controller
      */
     public function edit(Recipe $recipe)
     {
-        //
+        $foodTypes = FoodType::all();
+        $countries = DB::table('countries')->get();
+
+        return view('private.recipe.edit', compact('recipe', 'foodTypes', 'countries'));
     }
 
     /**
@@ -94,9 +96,28 @@ class RecipeController extends Controller
      * @param  \App\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recipe $recipe)
+    public function update(StoreRecipe $request, Recipe $recipe)
     {
-        //
+        $data = $request->validated();
+
+        $images = array_pull($data, 'images');
+        $types = array_pull($data, 'type_ids');
+
+        $recipe->update($data);
+
+        if ($types) {
+            $recipe->types()->sync($types);
+        }
+
+        if ($images) {
+            $recipe->updateImages($images);
+        }
+
+        return redirect(route('recipes.index'))
+            ->with('alert', [
+                'type' => 'success',
+                'content' => "Your recipe \"{$recipe->name}\" was updated successfully"
+            ]);
     }
 
     /**

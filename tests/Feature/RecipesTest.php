@@ -124,11 +124,43 @@ class RecipesTest extends TestCase
     /** @test */
     public function authenticated_user_can_see_a_recipe()
     {
-        $this->disableExceptionHandling();
         $this->actingAs($this->user);
 
         $recipe = factory(Recipe::class)->create();
         $this->get(route('recipes.show', $recipe))
+            ->assertOk()
+            ->assertSee($recipe->name);
+    }
+
+    /** @test */
+    public function unauthenticated_user_cant_update_a_recipe()
+    {
+        $this->disableExceptionHandling();
+        $this->expectException(AuthenticationException::class);
+        $recipe = factory(Recipe::class)->create();
+        $this->put(route('recipes.update', $recipe));
+    }
+
+    /** @test */
+    public function authenticated_user_can_update_a_recipe()
+    {
+        $this->actingAs($this->user);
+
+        $recipeData = factory(Recipe::class)->state('withTypeIds')->make()->toArray();
+        $types = array_pull($recipeData, 'type_ids');
+
+        $recipe = Recipe::create($recipeData);
+        $recipe->types()->sync($types);
+
+        // Modify the recipe
+        $recipe->name = 'Super cool recipe!';
+
+        // Format data to send
+        $dataToSend = $recipe->toArray();
+        $dataToSend['type_ids'] = $types->toArray();
+
+        $this->followingRedirects()
+            ->patch(route('recipes.update', $recipe), $dataToSend)
             ->assertOk()
             ->assertSee($recipe->name);
     }
