@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
+    protected $fillable = ['path'];
 
     protected static function boot()
     {

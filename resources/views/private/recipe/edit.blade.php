@@ -26,19 +26,17 @@
                         <label for="type_ids">What kind of meal is?</label>
                         <select multiple class="form-control{{ $errors->has('type_ids') ? ' is-invalid' : '' }}" name="type_ids[]" id="type_ids" aria-describedby="foodTypeHelp">
                             @php
-                                $ids = $foodTypes->pluck('id');
+                            $ids = $foodTypes->pluck('id');
                             @endphp
                             @foreach ($foodTypes as $foodType)
-                            <option
-                                value="{{ $foodType->id }}"
-                                @if(old('type_ids') && array_search($foodType->id, old('type_ids')))
-                                    {{ 'selected' }}
+                            <option value="{{ $foodType->id }}" @if(old('type_ids') && array_search($foodType->id, old('type_ids')))
+                                {{ 'selected' }}
                                 @endif
 
                                 @if(!old('type_ids') && $ids->search($foodType->id))
-                                    {{ 'selected' }}
+                                {{ 'selected' }}
                                 @endif
-                            >
+                                >
                                 {{ $foodType->value }}
                             </option>
                             @endforeach
@@ -89,16 +87,17 @@
                         <script>
                             var imagesData = @json($recipe->getImages());
                         </script>
+                    @else
+                        <script>
+                            var imagesData = null;
+                        </script>
                     @endif
                     <input class="dropzone" type="file" name="images[]" multiple />
                 </div>
             </div>
             <div class="form-group">
                 <label for="content">Recipe's content</label>
-                <textarea
-                    class="form-control{{ $errors->has('content') ? ' is-invalid' : '' }}"
-                    name="content"
-                    id="content">{{ old('content') ?? $recipe->content }}</textarea>
+                <textarea class="form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" name="content" id="content">{{ old('content') ?? $recipe->content }}</textarea>
                 <small id="contentHelp" class="form-text text-muted">Elaborate on how would you prepare this meal.</small>
 
                 @if($errors->has('content'))

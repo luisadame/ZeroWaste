@@ -128,6 +128,14 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        //
+        foreach ($recipe->images as $image) {
+            $image->delete();
+        }
+        $recipe->delete();
+        return redirect(route('recipes.index'))
+            ->with('alert', [
+                'type' => 'success',
+                'content' => "Your recipe \"{$recipe->name}\" was deleted successfully"
+            ]);
     }
 }

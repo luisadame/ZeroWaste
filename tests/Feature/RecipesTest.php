@@ -10,6 +10,7 @@ use App\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
 
 class RecipesTest extends TestCase
 {
@@ -163,5 +164,32 @@ class RecipesTest extends TestCase
             ->patch(route('recipes.update', $recipe), $dataToSend)
             ->assertOk()
             ->assertSee($recipe->name);
+    }
+
+    /** @test */
+    public function authenticated_user_can_delete_a_recipe()
+    {
+        $this->actingAs($this->user);
+
+        $recipe = factory(Recipe::class)->create();
+
+        $this->assertDatabaseHas('recipes', $recipe->toArray());
+
+        $this->followingRedirects()
+            ->delete(route('recipes.destroy', $recipe))
+            ->assertOk()
+            ->assertSee($recipe->name);
+
+        $this->assertDatabaseMissing('recipes', $recipe->toArray());
+    }
+
+    /** @test */
+    public function unauthenticated_user_cant_delete_a_recipe()
+    {
+        $this->disableExceptionHandling();
+        $this->expectException(AuthenticationException::class);
+
+        $recipe = factory(Recipe::class)->create();
+        $this->delete(route('recipes.destroy', $recipe));
     }
 }
