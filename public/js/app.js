@@ -31182,11 +31182,17 @@ filepond__WEBPACK_IMPORTED_MODULE_0__["setOptions"]({
   }, {}))
 });
 var dropzones = document.querySelector('.dropzone');
-filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones, {
+var options = {
   acceptedFileTypes: ['image/jpeg', 'image/png', 'image/webp'],
   imageValidateSizeMinWidth: 640,
   imageValidateSizeMinHeight: 480
-});
+};
+
+if (imagesData) {
+  options.files = imagesData;
+}
+
+var fp = filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones, options);
 
 /***/ }),
 

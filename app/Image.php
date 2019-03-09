@@ -2,14 +2,29 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
-use App\Exceptions\InvalidPathException;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($image) {
+            if (Storage::disk('images')->exists($image->path)) {
+                File::move(
+                    storage_path('app/images/' . $image->path),
+                    storage_path('app/deleted/' . $image->path)
+                );
+            }
+        });
+    }
+
     protected $visible = ['id', 'path'];
 
     public function imageable()

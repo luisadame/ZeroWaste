@@ -55,7 +55,7 @@ FilePond.setOptions({
     }
 });
 let dropzones = document.querySelector('.dropzone');
-FilePond.create(dropzones, {
+let options = {
     acceptedFileTypes: [
         'image/jpeg',
         'image/png',
@@ -63,4 +63,8 @@ FilePond.create(dropzones, {
     ],
     imageValidateSizeMinWidth: 640,
     imageValidateSizeMinHeight: 480
-});
+};
+if (imagesData) {
+    options.files = imagesData;
+}
+const fp = FilePond.create(dropzones, options);
