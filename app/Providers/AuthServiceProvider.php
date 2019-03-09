@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Inventory;
+use App\Recipe;
 use App\Policies\InventoryPolicy;
+use App\Policies\RecipePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Inventory::class => InventoryPolicy::class
+        Inventory::class => InventoryPolicy::class,
+        Recipe::class => RecipePolicy::class
     ];
 
     /**

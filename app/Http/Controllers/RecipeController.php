@@ -9,6 +9,11 @@ use App\Http\Requests\StoreRecipe;
 
 class RecipeController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Recipe::class, 'recipe');
+    }
+
     /**
      * Display a listing of the resource.
      *

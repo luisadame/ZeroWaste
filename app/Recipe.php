@@ -24,6 +24,11 @@ class Recipe extends Imageable
         return $timeTotring;
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function types()
     {
         return $this->morphToMany('App\FoodType', 'typeable');

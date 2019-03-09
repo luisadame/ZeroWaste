@@ -147,7 +147,11 @@ class RecipesTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $recipeData = factory(Recipe::class)->state('withTypeIds')->make()->toArray();
+        $recipeData = factory(Recipe::class)
+            ->state('withTypeIds')
+            ->make(['user_id' => $this->user->id])
+            ->toArray();
+
         $types = array_pull($recipeData, 'type_ids');
 
         $recipe = Recipe::create($recipeData);
@@ -171,7 +175,7 @@ class RecipesTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $recipe = factory(Recipe::class)->create();
+        $recipe = factory(Recipe::class)->create(['user_id' => $this->user->id]);
 
         $this->assertDatabaseHas('recipes', $recipe->toArray());
 

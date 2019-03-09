@@ -71,6 +71,9 @@
                     </div>
                 </div>
                 <div class="col-8">
+                    <script>
+                        var imagesData = null;
+                    </script>
                     <input class="dropzone" type="file" name="images[]" multiple />
                 </div>
             </div>
