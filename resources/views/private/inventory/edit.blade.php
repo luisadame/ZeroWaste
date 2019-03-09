@@ -9,7 +9,7 @@
                 @method('patch')
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name" aria-describedby="nameHelp" placeholder="Enter name" value="{{ $inventory->name }}">
+                    <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name" aria-describedby="nameHelp" placeholder="Enter name" value="{{ old('name') ?? $inventory->name }}">
                     <small id="nameHelp" class="form-text text-muted">This is the name of your inventory</small>
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
