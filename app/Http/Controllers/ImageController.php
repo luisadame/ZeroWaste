@@ -23,7 +23,7 @@ class ImageController extends Controller
      * eventually.
      *
      * @param StoreImage $request
-     * @return void
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
      */
     public function store(StoreImage $request)
     {
@@ -39,7 +39,8 @@ class ImageController extends Controller
      * It retrieves a file already stored in local disk
      *
      * @param Request $request
-     * @return void
+     * @throws \Illuminate\Validation\ValidationException
+     * @return \Illuminate\Contracts\Routing\ResponseFactory
      */
     public function show(Request $request)
     {
@@ -56,9 +57,16 @@ class ImageController extends Controller
         if (!$id) {
             return;
         }
+
         $filename = (new Image)->getPathFromServerId($id);
         $file = Storage::disk($disk)->get($filename);
+        $size = Storage::disk($disk)->size($filename);
+        $type = Storage::disk($disk)->mimeType($filename);
+
         return response($file, 200, [
+            'Access-Control-Expose-Headers' => 'Content-Disposition, Content-Length, X-Content-Transfer-Id',
+            'Content-Type' => $type,
+            'Content-Length' => $size,
             'Content-Disposition' => sprintf('inline; filename="%s"', $filename)
         ]);
     }
@@ -67,7 +75,7 @@ class ImageController extends Controller
      * Destroys a temporary file.
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
      */
     public function destroy(Request $request)
     {
