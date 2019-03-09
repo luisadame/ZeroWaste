@@ -33,3 +33,9 @@ $factory->state(Recipe::class, 'withImages', function (Faker $faker) {
 
     return compact('images');
 });
+
+$factory->state(Recipe::class, 'withTypeIds', function (Faker $faker) {
+    return [
+        'type_ids' => DB::table('food_types')->inRandomOrder()->limit(rand(1, 4))->select('id')->pluck('id')
+    ];
+});
