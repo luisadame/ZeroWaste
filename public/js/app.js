@@ -64435,39 +64435,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/** Vue */
+
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('notification-reader', _components_NotificationReaderComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
-var notifications = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
-  el: '#navbar'
-});
-var options = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
-  el: '#food-grid',
-  data: {
-    showModal: false,
-    form: null
-  },
-  methods: {
-    toggleModal: function toggleModal(e) {
-      this.showModal = !this.showModal;
-      this.form = e.target.closest('form');
+
+if (document.getElementById('navbar')) {
+  var notifications = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
+    el: '#navbar'
+  });
+}
+
+if (document.getElementById('food-grid')) {
+  var options = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
+    el: '#food-grid',
+    data: {
+      showModal: false,
+      form: null
     },
-    deleteFood: function deleteFood(e) {
-      e.preventDefault();
-      this.form.submit();
-    },
-    cancelDeletion: function cancelDeletion() {
-      this.form = null;
+    methods: {
+      toggleModal: function toggleModal(e) {
+        this.showModal = !this.showModal;
+        this.form = e.target.closest('form');
+      },
+      deleteFood: function deleteFood(e) {
+        e.preventDefault();
+        this.form.submit();
+      },
+      cancelDeletion: function cancelDeletion() {
+        this.form = null;
+      }
     }
-  }
-});
+  });
+}
 
 /***/ }),
 
@@ -64508,6 +64511,8 @@ try {
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
+/** Tooltip */
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -64557,6 +64562,11 @@ if (imagesData) {
 }
 
 var fp = filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones, options);
+/** Tooltip logo */
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
 
 /***/ }),
 

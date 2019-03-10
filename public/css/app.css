@@ -11394,6 +11394,10 @@ table.b-table.b-table-selectable > tbody > tr {
           user-select: none;
 }
 
+.logo {
+  width: 40px;
+}
+
 .grid {
   display: grid;
   grid-gap: 1em;

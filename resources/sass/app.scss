@@ -10,10 +10,14 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-@import '~filepond/dist/filepond.min.css';
-@import '~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 @import '~bootstrap-vue/src/index.scss';
 
+// Filepond
+@import '~filepond/dist/filepond.min.css';
+@import '~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+
+// Partials
+@import 'navbar';
 @import 'grid';
 @import 'card';
 @import 'dropzone';

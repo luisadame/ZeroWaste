@@ -1,7 +1,7 @@
 @extends('private.layouts.main')
 
 @section('content')
-<div class="container-fluid p-3">
+<div class="container-fluid p-3 p-sm-1">
     <h2>Dashboard</h2>
     <div class="grid">
         @component('private.components.card')

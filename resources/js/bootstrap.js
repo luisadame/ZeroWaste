@@ -15,6 +15,8 @@ try {
     require('bootstrap');
 } catch (e) {}
 
+/** Tooltip */
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -68,3 +70,8 @@ if (imagesData) {
     options.files = imagesData;
 }
 const fp = FilePond.create(dropzones, options);
+
+/** Tooltip logo */
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});

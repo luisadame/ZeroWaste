@@ -1,6 +1,6 @@
 <nav id="navbar" class="navbar navbar-expand d-flex">
     <a class="navbar-brand" href="@if(Auth::check()) {{ route('home') }} @else {{ route('landing') }} @endif" translate="no">
-        {{ config('app.name') }}
+        <img class="rounded logo" src="/svg/dish.svg" alt="Logo" data-toggle="tooltip" data-placement="bottom" title="{{ config('app.name') }}">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -17,10 +17,17 @@
         <div class="buttons ml-auto d-flex align-items-center">
             <notification-reader></notification-reader>
             @auth
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button class="btn btn-link">@lang('auth.logout')</button>
-            </form>
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ auth()->user()->name }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="userOptions">
+                    <form class="dropdown-item" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-link">@lang('auth.logout')</button>
+                    </form>
+                </div>
+            </div>
             @endauth
             @guest
             <a href="{{ route('login') }}" class="btn btn-link">@lang('auth.login')</a>

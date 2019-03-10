@@ -45,7 +45,7 @@
                 This will delete your food item forever, do you still want to proceed?
             </div>
             <template slot="modal-ok">
-                <strong>DELETE</strong>
+                <strong class="text-uppercase">DELETE</strong>
             </template>
         </b-modal>
     </div>
