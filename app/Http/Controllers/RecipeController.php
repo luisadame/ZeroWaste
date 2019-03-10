@@ -6,6 +6,8 @@ use App\Recipe;
 use App\FoodType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRecipe;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\RecipeCreated;
 
 class RecipeController extends Controller
 {
@@ -60,6 +62,9 @@ class RecipeController extends Controller
         if ($images) {
             $recipe->saveImages($images);
         }
+
+        // Let's notofy the user
+        auth()->user()->notify(new RecipeCreated($recipe));
 
         return redirect(route('recipes.index'))
             ->with('alert', [

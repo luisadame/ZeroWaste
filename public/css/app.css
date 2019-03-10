@@ -10697,8 +10697,14 @@ a.text-dark:focus {
   background-color: #ffed49cc;
 }
 
+.card {
+  overflow: hidden;
+}
+
 .card:hover .card-options {
   opacity: 1;
+  -webkit-transform: none;
+          transform: none;
 }
 
 .card-options {
@@ -10706,7 +10712,9 @@ a.text-dark:focus {
   right: 10px;
   top: 10px;
   opacity: 0;
-  transition: opacity 250ms ease-in-out;
+  transition: all 200ms ease-in;
+  -webkit-transform: translate3d(100%, 0, 0);
+          transform: translate3d(100%, 0, 0);
 }
 
 .filedrop {
