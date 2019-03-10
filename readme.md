@@ -49,7 +49,7 @@ Hay varios componentes que necesitan de estar logueado para verlos y otros neces
 - [x] [Navbar](resources/views/partials/navbar.blade.php)
 - [x] [Pagination](resources/views/private/inventory/show.blade.php#L53)
 - [x] [Popover](resources/js/components/NotificationReaderComponent.vue#L7)
-- [] Scrollspy
+- [x] [Scrollspy](resources/views/landing.blade.php#L23)
 - [x] [Spinners](resources/js/components/NotificationReaderComponent.vue#L17)
 - [x] [Tooltips](resources/views/partials/navbar.blade.php#L3)
 - [] Progress

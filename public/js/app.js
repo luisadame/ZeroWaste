@@ -64565,6 +64565,13 @@ if (token) {
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
+/** Scrollspy */
+
+if ($('#features')) {
+  $('body').scrollspy({
+    target: '#features'
+  });
+}
 
 /***/ }),
 
