@@ -11,5 +11,5 @@ require('./bootstrap');
 Vue.use(BootstrapVue)
 Vue.component('notification-reader', NotificationReaderComponent);
 const app = new Vue({
-    el: '#app'
+    el: '#navbar'
 });

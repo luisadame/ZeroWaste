@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand d-flex">
+<nav id="navbar" class="navbar navbar-expand d-flex">
     <a class="navbar-brand" href="@if(Auth::check()) {{ route('home') }} @else {{ route('landing') }} @endif" translate="no">
         {{ config('app.name') }}
     </a>

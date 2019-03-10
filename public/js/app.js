@@ -1763,13 +1763,42 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['notification']
+  props: ['notification'],
+  data: function data() {
+    return {
+      loading: false
+    };
+  },
+  methods: {
+    markAsRead: function markAsRead() {
+      var _this = this;
+
+      this.loading = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/notifications/read', {
+        id: this.notification.id
+      }).then(function (_ref) {
+        var data = _ref.data;
+        _this.loading = false;
+
+        _this.$emit('read');
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -1810,6 +1839,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1818,20 +1855,31 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      notifications: []
+      notifications: [],
+      loading: false
     };
   },
   methods: {
     readAll: function readAll() {
-      console.log('hello');
+      var _this = this;
+
+      this.loading = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/notifications/readAll').then(function (_ref) {
+        var data = _ref.data;
+        _this.loading = false;
+        _this.notifications = [];
+      });
+    },
+    remove: function remove(key) {
+      this.notifications.splice(key, 1);
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/notifications').then(function (_ref) {
-      var data = _ref.data;
-      _this.notifications = data;
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/notifications').then(function (_ref2) {
+      var data = _ref2.data;
+      _this2.notifications = data;
     }).catch(function (e) {
       return console.error;
     });
@@ -52156,9 +52204,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v("\n    " + _vm._s(_vm.notification.data.message) + "\n")
-  ])
+  return _c(
+    "div",
+    { staticClass: "d-flex align-items-center justify-content-between" },
+    [
+      _c("b", [_vm._v(_vm._s(_vm.notification.data.message))]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "ml-2 btn btn-danger btn-sm",
+          on: { click: _vm.markAsRead }
+        },
+        [
+          !_vm.loading
+            ? _c("span", [_vm._v("×")])
+            : _c(
+                "div",
+                {
+                  staticClass: "spinner-border spinner-border-sm",
+                  attrs: { role: "status" }
+                },
+                [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+              )
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -52211,34 +52283,60 @@ var render = function() {
           }
         },
         [
-          _c("template", { slot: "title" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary btn-sm",
-                attrs: { type: "button" },
-                on: { click: _vm.readAll }
-              },
-              [_vm._v("Read all")]
-            )
-          ]),
+          _vm.notifications.length
+            ? _c("template", { slot: "title" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-sm",
+                    attrs: { type: "button" },
+                    on: { click: _vm.readAll }
+                  },
+                  [
+                    !_vm.loading
+                      ? _c("span", [_vm._v("Read all")])
+                      : _c(
+                          "div",
+                          {
+                            staticClass: "spinner-border spinner-border-sm",
+                            attrs: { role: "status" }
+                          },
+                          [
+                            _c("span", { staticClass: "sr-only" }, [
+                              _vm._v("Loading...")
+                            ])
+                          ]
+                        )
+                  ]
+                )
+              ])
+            : _vm._e(),
           _vm._v(" "),
-          _c(
-            "b-list-group",
-            _vm._l(_vm.notifications, function(notification, key) {
-              return _c(
-                "b-list-group-item",
-                { key: key },
-                [
-                  _c("notification-component", {
-                    attrs: { notification: notification }
-                  })
-                ],
+          _vm.notifications.length
+            ? _c(
+                "b-list-group",
+                _vm._l(_vm.notifications, function(notification, key) {
+                  return _c(
+                    "b-list-group-item",
+                    { key: key },
+                    [
+                      _c("notification-component", {
+                        attrs: { notification: notification },
+                        on: {
+                          read: function($event) {
+                            return _vm.remove(key)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                }),
                 1
               )
-            }),
-            1
-          )
+            : _c("div", [
+                _vm._v("\n            No notifications today :)\n        ")
+              ])
         ],
         2
       )
@@ -64352,7 +64450,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('notification-reader', _components_NotificationReaderComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
-  el: '#app'
+  el: '#navbar'
 });
 
 /***/ }),
