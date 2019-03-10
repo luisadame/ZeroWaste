@@ -5,13 +5,13 @@
 ## Interfaces
 
 ### Sass
-- [x] Partials
-- [] Herencia
-- [x] Mixins
-- [] Funciones
-- [] Estructura de control
-- [x] Variables
-- [x] Listas o mapas
+- [x] [Partials](resources/sass/app.scss)
+- [x] [Herencia](resources/sass/landing.scss#L23)
+- [x] [Mixins](resources/sass/_grid.scss#L24)
+- [x] [Funciones](resources/sass/landing.scss#L18)
+- [x] [Estructura de control](resources/sass/_variables.scss#L11)
+- [x] [Variables](resources/sass/_variables.scss)
+- [x] [Listas o mapas](resources/sass/_grid.scss#L7)
 
 ### Bootstrap
 
@@ -21,7 +21,7 @@
 - [x] [Utilidad de texto](resources/views/private/inventory/show.blade.php#L48)
 - [x] [Utilidad de imagenes](resources/views/about.blade.php#L22)
 - [x] [Utilidad de embed](resources/views/about.blade.php#L18)
-- Utilidad de visibilidad
+- [x] [Utilidad de visibilidad](resources/sass/landing.scss#L22)
 - [x] [Tablas](resources/views/about.blade.php#L31)
 - [x] [Iconos](resources/js/components/ContactForm.vue)
 

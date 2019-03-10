@@ -8,6 +8,14 @@ $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 $logo-size: 40px;
 
+@if $logo-size < 40px {
+    @error "$logo-size cant be smaller than 40px";
+}
+
+@if $logo-size > 60px {
+    @error "$logo-size cant be greater than 60px";
+}
+
 // Colors
 $blue: #3490dc;
 $indigo: #6574cd;

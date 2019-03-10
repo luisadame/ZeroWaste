@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row mb-5">
-        <div class="col-3">
+        <div class="col-3 invisible-md">
             <nav id="features" class="navbar navbar-light bg-light">
                 <nav class="nav nav-pills flex-column">
                     <a class="nav-link" href="#inventory">Inventory</a>
@@ -19,7 +19,7 @@
                 </nav>
             </nav>
         </div>
-        <div class="col-9">
+        <div class="col-12 col-lg-9">
             <div data-spy="scroll" data-target="#features" data-offset="0">
                 <div class="mb-5">
                     <h2 style="font-size: 3rem" id="inventory">Inventory</h2>
