@@ -6,11 +6,12 @@
 2. `Configure .env file`
 3. `php artisan key:generate`
 4. `php artisan storage:link`
-5. `npm install`
-6. `npm run prod`
-7. `phpunit`
-8. `php artisan migrate:fresh --seed`
-9. Go to the webpage and use `admin@example.com` and `secret` as the credentials for the admin user.
+5. `ln -s ../images images` do this in `storage/app/public`
+6. `npm install`
+7. `npm run prod`
+8. `phpunit`
+9. `php artisan migrate:fresh --seed`
+10. Go to the webpage and use `admin@example.com` and `secret` as the credentials for the admin user.
 
 ## Interfaces
 
