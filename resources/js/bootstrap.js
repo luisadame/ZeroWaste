@@ -37,39 +37,37 @@ let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+    FilePond.registerPlugin(
+        FilePondPluginImagePreview,
+        FilePondPluginImageValidateSize,
+        FilePondPluginFileValidateType
+    );
+    FilePond.setOptions({
+        maxFiles: 10,
+        server: {
+            url: '/images',
+            ...['process', 'revert', 'restore', 'load'].reduce((obj, item) => {
+                obj[item] = { headers: { 'X-CSRF-TOKEN': token.content }};
+                return obj;
+            }, {})
+        }
+    });
+    let dropzones = document.querySelector('.dropzone');
+    let options = {
+        acceptedFileTypes: [
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ],
+        imageValidateSizeMinWidth: 640,
+        imageValidateSizeMinHeight: 480
+    };
+    if (imagesData) {
+        options.files = imagesData;
+    }
+    const fp = FilePond.create(dropzones, options);
 }
 
-FilePond.registerPlugin(
-    FilePondPluginImagePreview,
-    FilePondPluginImageValidateSize,
-    FilePondPluginFileValidateType
-);
-FilePond.setOptions({
-    maxFiles: 10,
-    server: {
-        url: '/images',
-        ...['process', 'revert', 'restore', 'load'].reduce((obj, item) => {
-            obj[item] = { headers: { 'X-CSRF-TOKEN': token.content }};
-            return obj;
-        }, {})
-    }
-});
-let dropzones = document.querySelector('.dropzone');
-let options = {
-    acceptedFileTypes: [
-        'image/jpeg',
-        'image/png',
-        'image/webp'
-    ],
-    imageValidateSizeMinWidth: 640,
-    imageValidateSizeMinHeight: 480
-};
-if (imagesData) {
-    options.files = imagesData;
-}
-const fp = FilePond.create(dropzones, options);
 
 /** Tooltip logo */
 $(function () {

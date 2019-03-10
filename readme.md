@@ -16,18 +16,18 @@
 ### Bootstrap
 
 - [] Contenedor con distintos breakpoints
-- [] Utilidad de borde
+- [] [Utilidad de borde](resources/views/partials/navbar.blade.php#L3)
 - [x] [Margin o padding responsive ](resources/views/private/home.blade.php#L4)
 - [x] [Utilidad de texto](resources/views/private/inventory/show.blade.php#L48)
-- [x] [Utilidad de imagenes](resources/views/partials/navbar.blade.php#L3)
-- [] Utilidad de embed
+- [x] [Utilidad de imagenes](resources/views/about.blade.php#L22)
+- [x] [Utilidad de embed](resources/views/about.blade.php#L18)
 - [] Utilidad de visibilidad
-- [] Tablas
+- [x] [Tablas](resources/views/about.blade.php#L31)
 - [] Iconos
 
 #### Componentes
 
-Probar los componentes estando logueado
+Hay varios componentes que necesitan de estar logueado para verlos y otros necesitar estar deslogueados.
 
 - [x] [Alert](resources/views/private/components/alert.blade.php)
 - [x] [Badge](resources/views/private/recipe/show.blade.php#L25)
@@ -41,11 +41,11 @@ Probar los componentes estando logueado
 - [x] [Form](resources/views/private/recipe/create.blade.php#L7)
 - [x] [Form validation](resources/views/private/recipe/create.blade.php#L18)
 - [] Input group
-- [] Jumbotron
+- [x] [Jumbotron](resources/views/landing.blade.php#L4)
 - [x] [List group](resources/js/components/NotificationReaderComponent.vue#L22)
-- [] Media object
+- [x] [Media object](resources/views/about.blade.php#L21)
 - [x] [Modal](resources/views/private/inventory/show.blade.php#L35)
-- [] Navs
+- [x] [Navs](resources/views/about.blade.php#L8)
 - [x] [Navbar](resources/views/partials/navbar.blade.php)
 - [x] [Pagination](resources/views/private/inventory/show.blade.php#L53)
 - [x] [Popover](resources/js/components/NotificationReaderComponent.vue#L7)

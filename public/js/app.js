@@ -64532,37 +64532,35 @@ var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+  filepond__WEBPACK_IMPORTED_MODULE_0__["registerPlugin"](filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1___default.a, filepond_plugin_image_validate_size__WEBPACK_IMPORTED_MODULE_3___default.a, filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_2___default.a);
+  filepond__WEBPACK_IMPORTED_MODULE_0__["setOptions"]({
+    maxFiles: 10,
+    server: _objectSpread({
+      url: '/images'
+    }, ['process', 'revert', 'restore', 'load'].reduce(function (obj, item) {
+      obj[item] = {
+        headers: {
+          'X-CSRF-TOKEN': token.content
+        }
+      };
+      return obj;
+    }, {}))
+  });
+  var dropzones = document.querySelector('.dropzone');
+  var options = {
+    acceptedFileTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    imageValidateSizeMinWidth: 640,
+    imageValidateSizeMinHeight: 480
+  };
+
+  if (imagesData) {
+    options.files = imagesData;
+  }
+
+  var fp = filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones, options);
 }
-
-filepond__WEBPACK_IMPORTED_MODULE_0__["registerPlugin"](filepond_plugin_image_preview__WEBPACK_IMPORTED_MODULE_1___default.a, filepond_plugin_image_validate_size__WEBPACK_IMPORTED_MODULE_3___default.a, filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_2___default.a);
-filepond__WEBPACK_IMPORTED_MODULE_0__["setOptions"]({
-  maxFiles: 10,
-  server: _objectSpread({
-    url: '/images'
-  }, ['process', 'revert', 'restore', 'load'].reduce(function (obj, item) {
-    obj[item] = {
-      headers: {
-        'X-CSRF-TOKEN': token.content
-      }
-    };
-    return obj;
-  }, {}))
-});
-var dropzones = document.querySelector('.dropzone');
-var options = {
-  acceptedFileTypes: ['image/jpeg', 'image/png', 'image/webp'],
-  imageValidateSizeMinWidth: 640,
-  imageValidateSizeMinHeight: 480
-};
-
-if (imagesData) {
-  options.files = imagesData;
-}
-
-var fp = filepond__WEBPACK_IMPORTED_MODULE_0__["create"](dropzones, options);
 /** Tooltip logo */
+
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();

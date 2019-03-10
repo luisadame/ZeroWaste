@@ -15,8 +15,8 @@
             </li>
         </ul>
         <div class="buttons ml-auto d-flex align-items-center">
-            <notification-reader></notification-reader>
             @auth
+            <notification-reader></notification-reader>
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ auth()->user()->name }}
