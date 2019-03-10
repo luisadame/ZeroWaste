@@ -24,7 +24,7 @@
         'food' => $food
         ]
         )
-        @slot('route', '')
+        @slot('route', route('food.show', $food))
         @slot('title', $food->name)
         @slot('text', $food->expirationString())
         @endcomponent

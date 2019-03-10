@@ -4,5 +4,6 @@ return [
     'about' => 'acerca de',
     'contact' => 'contacto',
     'inventory' => 'inventorio',
-    'recipe' => 'receta'
+    'recipe' => 'receta',
+    'food' => 'alimento'
 ];

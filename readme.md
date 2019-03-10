@@ -15,13 +15,13 @@
 
 ### Bootstrap
 
-- [] Contenedor con distintos breakpoints
+- Contenedor con distintos breakpoints
 - [x] [Utilidad de borde](resources/views/partials/navbar.blade.php#L3)
 - [x] [Margin o padding responsive ](resources/views/private/home.blade.php#L4)
 - [x] [Utilidad de texto](resources/views/private/inventory/show.blade.php#L48)
 - [x] [Utilidad de imagenes](resources/views/about.blade.php#L22)
 - [x] [Utilidad de embed](resources/views/about.blade.php#L18)
-- [] Utilidad de visibilidad
+- Utilidad de visibilidad
 - [x] [Tablas](resources/views/about.blade.php#L31)
 - [x] [Iconos](resources/js/components/ContactForm.vue)
 

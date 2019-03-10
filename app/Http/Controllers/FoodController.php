@@ -8,17 +8,6 @@ use Illuminate\Http\Request;
 class FoodController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $foods = Food::all();
-        return view('private.food', compact('foods'));
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -47,7 +36,7 @@ class FoodController extends Controller
      */
     public function show(Food $food)
     {
-        //
+        return view('private.food.show', compact('food'));
     }
 
     /**

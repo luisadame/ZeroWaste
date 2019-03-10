@@ -9,7 +9,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('inventories', 'InventoryController');
     Route::resource('recipes', 'RecipeController');
-    Route::resource('food', 'FoodController');
+    Route::resource('food', 'FoodController')->except('index');
 
     /** Images */
     Route::prefix('images')->group(function () {

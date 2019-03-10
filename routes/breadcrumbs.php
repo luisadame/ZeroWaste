@@ -2,6 +2,7 @@
 
 use App\Inventory;
 use App\Recipe;
+use App\Food;
 
 Breadcrumbs::for('home', function ($trail) {
     $trail->push('Home', route('home'));
@@ -51,4 +52,22 @@ Breadcrumbs::for('recipe.create', function ($trail) {
 Breadcrumbs::for('recipe.edit', function ($trail, Recipe $recipe) {
     $trail->parent('recipes');
     $trail->push(__('edit'), route('recipes.edit', $recipe->id));
+});
+
+/**
+ * Food
+ */
+Breadcrumbs::for('food', function ($trail, Food $food) {
+    $trail->parent('inventory', $food->inventory);
+    $trail->push($food->name, route('food.show', $food));
+});
+
+Breadcrumbs::for('food.create', function ($trail) {
+    $trail->parent('food');
+    $trail->push(__('create'), route('food.create'));
+});
+
+Breadcrumbs::for('food.edit', function ($trail, Food $food) {
+    $trail->parent('food');
+    $trail->push(__('edit'), route('food.edit', $food->id));
 });
