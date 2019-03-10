@@ -60,7 +60,8 @@ class RecipeCreated extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'recipe_id' => $this->recipe->id
+            'recipe_id' => $this->recipe->id,
+            'message' => $this->recipe->name . ' has been created!'
         ];
     }
 }

@@ -17,4 +17,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', 'ImageController@destroy')->name('images.destroy'); // revert
         Route::get('/', 'ImageController@show')->name('images.show'); // load
     });
+
+    /** Notifications */
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', 'NotificationController@index')->name('notifications.index');
+        Route::post('/read', 'NotificationController@read')->name('notifications.read');
+        Route::get('/readAll', 'NotificationController@readAll')->name('notifications.readAll');
+    });
 });
