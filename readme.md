@@ -2,6 +2,15 @@
 
 ## Backend
 
+1. `composer install`
+2. `Configure .env file`
+3. `php artisan key:generate`
+4. `phpunit`
+5. `php artisan migrate:fresh --seed`
+6. `npm run install`
+7. `npm run prod`
+8. Go to the webpage and use `admin@example.com` and `secret` as the credentials for the admin user.
+
 ## Interfaces
 
 ### Sass
@@ -15,7 +24,7 @@
 
 ### Bootstrap
 
-- Contenedor con distintos breakpoints
+- [x] [Contenedor con distintos breakpoints](resources/views/landing.blade.php#L22)
 - [x] [Utilidad de borde](resources/views/partials/navbar.blade.php#L3)
 - [x] [Margin o padding responsive ](resources/views/private/home.blade.php#L4)
 - [x] [Utilidad de texto](resources/views/private/inventory/show.blade.php#L48)
