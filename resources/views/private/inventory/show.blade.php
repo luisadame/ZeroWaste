@@ -15,6 +15,9 @@
         </form>
     </div>
     <h3>Your food items</h3>
+    <a href="{{ route('food.create', $inventory) }}" class="btn btn-primary" tabindex="-1" role="button">
+        Add food item
+    </a>
     <div id="food-grid" class="container-fluid grid mt-3 mb-5 p-0">
         @forelse($foodCollection as $food)
         @component(
@@ -32,15 +35,7 @@
         <p>__('empty.no_food_yet')</p>
         @endforelse
 
-        <b-modal
-            v-show="showModal"
-            v-model="showModal"
-            title="Deletion confirmation"
-            :ok-variant="'danger'"
-            :cancel-variant="'link'"
-            @ok="deleteFood"
-            @cancel="cancelDeletion"
-        >
+        <b-modal v-show="showModal" v-model="showModal" title="Deletion confirmation" :ok-variant="'danger'" :cancel-variant="'link'" @ok="deleteFood" @cancel="cancelDeletion">
             <div class="d-block text-center">
                 This will delete your food item forever, do you still want to proceed?
             </div>

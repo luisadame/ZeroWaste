@@ -9,7 +9,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('inventories', 'InventoryController');
     Route::resource('recipes', 'RecipeController');
-    Route::resource('food', 'FoodController')->except('index');
+    Route::resource('food', 'FoodController')->except('create');
+    Route::get('/inventories/{inventory}/create', 'FoodController@create')->name('food.create');
 
     /** Images */
     Route::prefix('images')->group(function () {

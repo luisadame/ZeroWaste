@@ -62,12 +62,12 @@ Breadcrumbs::for('food', function ($trail, Food $food) {
     $trail->push($food->name, route('food.show', $food));
 });
 
-Breadcrumbs::for('food.create', function ($trail) {
-    $trail->parent('food');
-    $trail->push(__('create'), route('food.create'));
+Breadcrumbs::for('food.create', function ($trail, Inventory $inventory) {
+    $trail->parent('inventory', $inventory);
+    $trail->push(__('create'), route('food.create', $inventory));
 });
 
 Breadcrumbs::for('food.edit', function ($trail, Food $food) {
-    $trail->parent('food');
+    $trail->parent('food', $food);
     $trail->push(__('edit'), route('food.edit', $food->id));
 });
