@@ -12,6 +12,7 @@
         @endif
     </title>
     <link rel="stylesheet" href="{{ mix('/css/landing.css') }}">
+    @stack('style')
 </head>
 <body class="min-vh-100 d-flex flex-column">
     <header>

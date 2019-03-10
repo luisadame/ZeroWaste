@@ -1,15 +1,23 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue'
 import NotificationReaderComponent from './components/NotificationReaderComponent.vue';
+import ContactForm from './components/ContactForm.vue';
 require('./bootstrap');
 
 /** Vue */
 Vue.use(BootstrapVue)
 Vue.component('notification-reader', NotificationReaderComponent);
+Vue.component('contact-form', ContactForm);
 
 if (document.getElementById('navbar')) {
     const notifications = new Vue({
         el: '#navbar'
+    });
+}
+
+if (document.getElementById('contact')) {
+    const contact = new Vue({
+        el: '#contact'
     });
 }
 
