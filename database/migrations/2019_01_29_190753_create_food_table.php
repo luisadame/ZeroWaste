@@ -20,7 +20,7 @@ class CreateFoodTable extends Migration
             $table->date('expiration_date');
             $table->timestamps();
 
-            $table->foreign('inventory_id')->references('id')->on('inventories');
+            $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
         });
     }
 
