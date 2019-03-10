@@ -46,7 +46,7 @@ class InventoriesTest extends TestCase
     /** @test */
     public function a_user_cant_access_anothers_user_inventory_page()
     {
-        $this->actingAs($this->user);
+        $this->actingAs(factory(User::class)->create());
 
         $inventory = factory(Inventory::class)->create([
             'user_id' => factory(User::class)->create()->id
@@ -80,7 +80,7 @@ class InventoriesTest extends TestCase
     /** @test */
     public function a_user_cant_access_anothers_user_edit_inventory_page()
     {
-        $this->actingAs($this->user);
+        $this->actingAs(factory(User::class)->create());
 
         $inventory = factory(Inventory::class)->create([
             'user_id' => factory(User::class)->create()->id
@@ -124,7 +124,7 @@ class InventoriesTest extends TestCase
     /** @test */
     public function a_user_cant_update_anothers_user_inventory()
     {
-        $this->actingAs($this->user);
+        $this->actingAs(factory(User::class)->create());
 
         $inventory = factory(Inventory::class)->create([
             'user_id' => factory(User::class)->create()->id
@@ -154,7 +154,7 @@ class InventoriesTest extends TestCase
     /** @test */
     public function a_user_cant_delete_anothers_user_inventory()
     {
-        $this->actingAs($this->user);
+        $this->actingAs(factory(User::class)->create());
 
         $inventory = factory(Inventory::class)->create([
             'user_id' => factory(User::class)->create()->id
