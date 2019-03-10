@@ -10,7 +10,8 @@ use App\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Response;
+use App\Notifications\RecipeCreated;
+use Illuminate\Support\Facades\Notification;
 
 class RecipesTest extends TestCase
 {
@@ -71,6 +72,8 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe()
     {
+        Notification::fake();
+
         // Log the user in
         $this->actingAs($this->user);
 
@@ -84,6 +87,11 @@ class RecipesTest extends TestCase
             ->post(route('recipes.store'), $data)
             ->assertSuccessful()
             ->assertSee($recipe->name);
+
+        Notification::assertSentTo(
+            [$this->user],
+            RecipeCreated::class
+        );
     }
 
     /** @test */
