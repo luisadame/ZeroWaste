@@ -1,7 +1,5 @@
 <nav class="navbar navbar-expand d-flex">
-    <a class="navbar-brand"
-        href="@if(Auth::check()) {{ route('home') }} @else {{ route('landing') }} @endif"
-        translate="no">
+    <a class="navbar-brand" href="@if(Auth::check()) {{ route('home') }} @else {{ route('landing') }} @endif" translate="no">
         {{ config('app.name') }}
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +14,8 @@
                 <a class="nav-link" href="{{ route('contact') }}">@flang('pages.contact', true)</a>
             </li>
         </ul>
-        <div class="buttons ml-auto">
+        <div class="buttons ml-auto d-flex align-items-center">
+            <notification-reader></notification-reader>
             @auth
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
