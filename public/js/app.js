@@ -1845,8 +1845,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1864,7 +1862,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/notifications/readAll').then(function (_ref) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/notifications/readAll").then(function (_ref) {
         var data = _ref.data;
         _this.loading = false;
         _this.notifications = [];
@@ -1877,7 +1875,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this2 = this;
 
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/notifications').then(function (_ref2) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/notifications").then(function (_ref2) {
       var data = _ref2.data;
       _this2.notifications = data;
     }).catch(function (e) {
@@ -52264,7 +52262,7 @@ var render = function() {
           attrs: { id: "notifications", type: "button" }
         },
         [
-          _vm._v("\n        Notifications "),
+          _vm._v("Notifications\n    "),
           _c("span", { staticClass: "badge badge-light" }, [
             _vm._v(_vm._s(_vm.notifications.length))
           ])
@@ -52334,9 +52332,7 @@ var render = function() {
                 }),
                 1
               )
-            : _c("div", [
-                _vm._v("\n            No notifications today :)\n        ")
-              ])
+            : _c("div", [_vm._v("No notifications today :)")])
         ],
         2
       )
@@ -64449,8 +64445,28 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('notification-reader', _components_NotificationReaderComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
-var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
+var notifications = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#navbar'
+});
+var options = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
+  el: '#food-grid',
+  data: {
+    showModal: false,
+    form: null
+  },
+  methods: {
+    toggleModal: function toggleModal(e) {
+      this.showModal = !this.showModal;
+      this.form = e.target.closest('form');
+    },
+    deleteFood: function deleteFood(e) {
+      e.preventDefault();
+      this.form.submit();
+    },
+    cancelDeletion: function cancelDeletion() {
+      this.form = null;
+    }
+  }
 });
 
 /***/ }),

@@ -10,6 +10,27 @@ import NotificationReaderComponent from './components/NotificationReaderComponen
 require('./bootstrap');
 Vue.use(BootstrapVue)
 Vue.component('notification-reader', NotificationReaderComponent);
-const app = new Vue({
+const notifications = new Vue({
     el: '#navbar'
+});
+
+const options = new Vue({
+    el: '#food-grid',
+    data: {
+        showModal: false,
+        form: null
+    },
+    methods: {
+        toggleModal(e) {
+            this.showModal = !this.showModal;
+            this.form = e.target.closest('form');
+        },
+        deleteFood(e) {
+            e.preventDefault();
+            this.form.submit();
+        },
+        cancelDeletion() {
+            this.form = null;
+        }
+    }
 });

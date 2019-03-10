@@ -15,7 +15,7 @@
             <form action="{{ route('food.destroy', $food) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                <button v-on:click.prevent="toggleModal" class="btn btn-danger btn-sm" type="submit">Delete</button>
             </form>
         </div>
         <div class="card-body">
