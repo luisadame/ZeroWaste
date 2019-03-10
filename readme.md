@@ -9,8 +9,8 @@
 5. `ln -s ../images images` do this in `storage/app/public`
 6. `npm install`
 7. `npm run prod`
-8. `phpunit`
-9. `php artisan migrate:fresh --seed`
+8. `php artisan migrate:fresh --seed`
+9. `phpunit`
 10. Go to the webpage and use `admin@example.com` and `secret` as the credentials for the admin user.
 
 ## Interfaces
