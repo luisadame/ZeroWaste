@@ -5,9 +5,11 @@
 1. `composer install`
 2. `Configure .env file`
 3. `php artisan key:generate`
-4. `phpunit`
-5. `php artisan migrate:fresh --seed`
-6. Go to the webpage and use `admin@example.com` and `secret` as the credentials for the admin user.
+4. `npm install`
+5. `npm run prod`
+6. `phpunit`
+7. `php artisan migrate:fresh --seed`
+8. Go to the webpage and use `admin@example.com` and `secret` as the credentials for the admin user.
 
 ## Interfaces
 
